@@ -17,6 +17,9 @@ const styles = {
 
     inputLabel: "text-xl flex flex-col gap-1",
 
+    Search: "w-full max-w-[210px] px-4 py-2 border border-solid border-gray-300 rounded-lg text-black focus:outline-none  mx-auto",
+
+
     input: "w-full py-1 px-3 outline outline-solid outline-gray-200 focus:outline focus:outline-solid focus:outline-gray-200 rounded-sm",
 
     primaryButton: `py-3 px-6 text-[11px] font-bold tracking-widest text-primary hover:bg-primary hover:text-light-primary border border-solid border-primary ${mainTransition}`,
