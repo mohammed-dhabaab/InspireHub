@@ -22,7 +22,7 @@ const styles = {
 
     input: "w-full py-1 px-3 outline outline-solid outline-gray-200 focus:outline focus:outline-solid focus:outline-gray-200 rounded-sm",
 
-    primaryButton: `py-3 px-6 text-[11px] font-bold tracking-widest text-primary hover:bg-primary hover:text-light-primary border border-solid border-primary ${mainTransition}`,
+    primaryButton: `py-3 px-6 text-[14px] font-bold tracking-widest text-primary hover:bg-primary hover:text-light-primary border border-solid border-primary ${mainTransition}`,
     secondaryButton: `py-[10px] px-8 text-xs font-semibold text-light-primary border border-solid border-light-primary hover:bg-light-primary hover:text-dark ${mainTransition}`,
     ghostButton: "bg-slate-800 hover:bg-slate-700 text-white py-2 px-6 rounded-md transition-all ease-in-out duration-500",
 
