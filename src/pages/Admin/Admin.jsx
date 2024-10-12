@@ -1,37 +1,47 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { BiSearch } from "react-icons/bi";
 import styles from "../../styles";
 import searchForTerm from "../../utils/searchForTerm";
 
 function Admin() {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  const apiUrl = import.meta.env.VITE_USERS_API;
+  const ideasApiUrl = import.meta.env.VITE_IDEAS_API;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(
-          "https://670941a3af1a3998baa0ec5c.mockapi.io/users"
-        );
+        const response = await axios.get(apiUrl);
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
     fetchUsers();
-  }, []);
+  }, [apiUrl]);
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(
-        `https://670941a3af1a3998baa0ec5c.mockapi.io/users/${id}`
+      await axios.delete(`${apiUrl}/${id}`);
+
+      const ideasResponse = await axios.get(ideasApiUrl);
+      const ideas = ideasResponse.data;
+      const userIdeas = ideas.filter((idea) => idea.studentId === id);
+      await Promise.all(
+        userIdeas.map(async (idea) => {
+          await axios.delete(`${ideasApiUrl}/${idea.id}`);
+        })
       );
-      setUsers((prevUser) => prevUser.filter((user) => user.id !== id));
-      console.log("User deleted successfully");
+
+      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+      console.log("User and related ideas deleted successfully");
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error("Error deleting user and ideas:", error);
     }
   };
 
@@ -39,23 +49,33 @@ function Admin() {
     setSearchTerm(event.target.value);
   };
 
-  
   const handleCardClick = (id) => {
-    navigate(`/studentideas/${id}`); 
+    navigate(`/studentideas/${id}`);
   };
 
   return (
-    <main className={`${styles.outerWrapper}`}>
-      <div className={`${styles.wrapper}`}>
+    <main className={styles.outerWrapper}>
+      <div className={styles.wrapper}>
         <div className="space-y-8 mb-12">
           <h3 className={`${styles.heading3} text-center`}>Students Ideas</h3>
-          <input
-            type="text"
-            className={`${styles.Search} flex justify-center`}
-            placeholder="Search"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
+          <div className="relative flex justify-center">
+           
+            
+            <BiSearch
+              className="absolute lg:left-[56%] md:left-[58%] left-[65%]  top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={20}
+            />
+            <input
+              type="text"
+              className={`${styles.Search} `} 
+              placeholder="Search"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              
+            />
+
+           
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
@@ -75,8 +95,8 @@ function Admin() {
                     alt={user.name}
                   />
                   <div>
-                    <p className={`${styles.paragraph3}`}>{user.name}</p>
-                    <p className={`${styles.paragraph4}`}>
+                    <p className={styles.paragraph3}>{user.name}</p>
+                    <p className={styles.paragraph4}>
                       Number of ideas: {user.numberOfIdeas}
                     </p>
                   </div>
@@ -84,7 +104,7 @@ function Admin() {
 
                 <button
                   onClick={(e) => {
-                    e.stopPropagation(); 
+                    e.stopPropagation();
                     handleDelete(user.id);
                   }}
                   className="bg-[#f42525] w-8 h-8 rounded-lg"
