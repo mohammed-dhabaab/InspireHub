@@ -18,7 +18,7 @@ function Card({username , imgprofile ,title, description ,onEdit ,buttonText}) {
     <img className="w-10 h-10 rounded-full" src={`${imgprofile}`} alt="Rounded avatar"/>
     <p className={`${styles.paragraph4}`}>{username}</p>
     </div>
-    <button onClick={onEdit} className=" bg-blue-500 text-white px-2 py-1 rounded ml-40">{buttonText}</button>
+    <button onClick={onEdit} className=" text-black hover:text-green-600 hover: px-2 py-9 rounded ml-28 ">{buttonText}</button>
     </figure>
 
     <span className="font-bold">{title}</span>
