@@ -20,7 +20,7 @@ function Navbar() {
         <div className="flex items-center space-x-4 ml-auto ">
           {location.pathname === "/admin" && (
             <>
-              <Link to={"/studentideas"}>
+              <Link to={"/admin"}>
                 <p className="hover:text-[#53e3d7] cursor-pointer">Students</p>
               </Link>
               <Link to={"/"}>
@@ -34,7 +34,7 @@ function Navbar() {
 
           {location.pathname === "/studentideas" && (
             <>
-              <Link to={"/home"}>
+              <Link to={"/admin"}>
                 <p className="hover:text-[#53e3d7] cursor-pointer">Home</p>
               </Link>
               <Link to={"/"}>
