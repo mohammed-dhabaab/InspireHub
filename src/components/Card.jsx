@@ -15,14 +15,14 @@ function Card({username , imgprofile ,title, description}) {
   </figure >
   <div className="absolute text-neutral-800 bottom-4 left-0 px-4">
     <figure className="flex flex-wrap items-center gap-2 mb-6">
-    <img className="w-10 h-10 rounded-full" src="https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg" alt="Rounded avatar"/>
-    <p className={`${styles.paragraph4}`}>Rana</p>
+    <img className="w-10 h-10 rounded-full" src={`${imgprofile}`} alt="Rounded avatar"/>
+    <p className={`${styles.paragraph4}`}>{username}</p>
     </figure>
 
-    <span className="font-bold">Title</span>
+    <span className="font-bold">{title}</span>
     <p className="text-sm opacity-60 line-clamp-2">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget
-      feugiat orci. Curabitur efficitur elit arcu, a luctus sapien luctus ut.
+        {description}
+    
     </p>
   </div>
 </div>

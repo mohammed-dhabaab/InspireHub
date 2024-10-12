@@ -1,31 +1,59 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import styles from "../../styles";
+import searchForTerm from "../../utils/searchForTerm";
 function Home() {
   const [ideas, setIdeas] = useState([
 
     {
         id: 1,
         username: "Rana",
-        imgprofile: "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg",
+        imgprofile: "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg",
         title: "فكرة 1",
         description: "وصف الفكرة الأولى.",
       },
       {
         id: 2,
         username: "Rana",
-        imgprofile: "https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg",
+        imgprofile: "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg",
         title: "فكرة 2",
         description: "وصف الفكرة الثانية.",
+      },
+      {
+        id: 3,
+        username: "Rana",
+        imgprofile: "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg",
+        title: "فكرة 3",
+        description: "وصف الفكرة الثالثة.",
+      },
+      {
+        id: 4,
+        username: "Rana",
+        imgprofile: "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg",
+        title: "فكرة 4",
+        description: "وصف الفكرة الرابعه.",
       },
 
   ]);
   const [filteredArr, setFiltredArr] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
+  const [newIdea,setNewIdea]=useState({
+    title:"",description:"",username:"",imgprofile:""
+  })
+
+  const addIdea =()=>{
+    if(newIdea.title && newIdea.description){
+        setIdeas([...ideas,{...newIdea, id:ideas.lenght +1}])
+        setFiltredArr([...filteredArr],{...newIdea,id:ideas.lenght+1})
+        setNewIdea({title:"",description:"",username:"",imgprofile:""})
+    }
+  }
 
 // useEffect(()=>{
-//     setFiltredArr(setSerachTerm(searchTerm,ideas))
-// },[searchTerm])
+//     const results=searchForTerm(searchTerm,ideas);
+//     setFiltredArr(results);
+
+// },[searchTerm ,ideas])
 
 
   return (
@@ -34,7 +62,22 @@ function Home() {
         <h2 className={styles.heading2}>Welcome Student Rana</h2>
       </div>
       <div className={`${styles.wrapper} flex justify-between`}>
-        <div>add</div>
+        <div>
+            <input
+            type="text"
+            placeholder="عنواف الفكره "
+            value={newIdea.title}
+            onChange={(e)=>{setNewIdea({...newIdea,title:e.target.value})}}
+            
+            />
+            <textarea
+            placeholder=",وصف الفكره"
+            value={newIdea.description}
+            onChange={(e)=>setNewIdea({...newIdea,description:e.target.value})}
+            
+            />
+            <button onClick={addIdea}>add new idea</button>
+        </div>
       </div>
 
       <div className={`${styles.wrapper} flex justify-center`}>
@@ -106,12 +149,14 @@ function Home() {
         </div>
 
         </div>
-    <div className={`${styles.wrapper}flex flex-wrap justify-center mt-4`}>
+        
+    <div className={`${styles.wrapper}flex flex-wrap  justify-center mt-4`}>
         {ideas.map((idea)=>(
         
                 <Card
                 key={idea.id}
                 username={idea.username}
+                imgprofile={idea.imgprofile}
                 title={idea.title}
                 description={idea.description}
                 />
