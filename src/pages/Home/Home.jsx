@@ -51,15 +51,16 @@ const [editIdea,setEditeIdea]=useState(null)
 
     }
 
-    const updateIdea =()=>{
-        if(editIdea.title && editIdea.description){
-            setIdeas(ideas.map(idea=>
-            idea.id === editIdea.id ? editIdea: idea
-            ))
-            setEditeIdea(null)
-        }
-    }
+   
   }
+  const updateIdea =()=>{
+    if(editIdea.title && editIdea.description){
+        setIdeas(ideas.map(idea=>
+        idea.id === editIdea.id ? editIdea: idea
+        ))
+        setEditeIdea(null)
+    }
+}
 
 // useEffect(()=>{
 //     const results=searchForTerm(searchTerm,ideas);
@@ -177,9 +178,9 @@ const [editIdea,setEditeIdea]=useState(null)
 
     <div className={`${styles.wrapper}`}>
     <button className="btn text-white bg-green-500" onClick={()=>setIsPopupOpen(true)}>New idea +</button>
-
+<div className="flex flex-wrap justify-around gap-1">
         {ideas.map((idea)=>(
-            <div className="flex-shrink-0 w-1/4 p-2" key={idea.id}>
+            <div className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2" key={idea.id}>
 
                 <Card
                 key={idea.id}
@@ -187,11 +188,13 @@ const [editIdea,setEditeIdea]=useState(null)
                 imgprofile={idea.imgprofile}
                 title={idea.title}
                 description={idea.description}
+                onEdit={()=>setEditeIdea(idea)}
+                buttonText="Edit"
                 />
-,<button onClick={()=>{setEditeIdea(idea)}}>Edit</button>
 </div>
 
         ))}
+        </div>
 {editIdea &&(
 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
 <div className="bg-white p-4 rounded shadow-lg relative">
@@ -212,11 +215,11 @@ onClick={()=>setEditeIdea(null)}
  />
  <textarea
  placeholder=",وصف الفكره"
- value={newIdea.description}
+ value={editIdea.description}
  onChange={(e)=>setEditeIdea({...editIdea,description:e.target.value})}
  
  />
- <button onClick={addIdea}>update Idea</button>
+ <button onClick={updateIdea}>update Idea</button>
 </div>
 </div>
 
