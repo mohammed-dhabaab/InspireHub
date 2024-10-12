@@ -12,7 +12,8 @@ export default {
         "thirdly-light-color": "rgb(242, 244, 247)",
         error: "rgb(239, 68, 68)",
         warning: "rgb(234, 179, 8)",
-        success: "rgb(34, 197, 94)"
+        success: "rgb(34, 197, 94)",
+        edit: "rgb(59, 130, 246)"
       },
       fontFamily: {
         IBM: ["IBM Plex Sans Arabic", "sans-serif"],
