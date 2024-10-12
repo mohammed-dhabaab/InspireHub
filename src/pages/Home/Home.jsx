@@ -41,6 +41,7 @@ function Home() {
     title:"",description:"",username:"",imgprofile:""
   })
 const [isPopupOpen, setIsPopupOpen]=useState(false)
+const [editIdea,setEditeIdea]=useState(null)
   const addIdea =()=>{
     if(newIdea.title && newIdea.description){
         setIdeas([...ideas,{...newIdea, id:ideas.length +1}])
@@ -48,6 +49,15 @@ const [isPopupOpen, setIsPopupOpen]=useState(false)
         setNewIdea({title:"",description:"",username:"Rana",imgprofile:""})
         setIsPopupOpen(false);
 
+    }
+
+    const updateIdea =()=>{
+        if(editIdea.title && editIdea.description){
+            setIdeas(ideas.map(idea=>
+            idea.id === editIdea.id ? editIdea: idea
+            ))
+            setEditeIdea(null)
+        }
     }
   }
 
@@ -74,7 +84,7 @@ const [isPopupOpen, setIsPopupOpen]=useState(false)
             >
                  &times;
                  </button>
-    <h3 className={`${styles.heading3}`}></h3>
+    <h3 className={`${styles.heading3}`}>Add new idea</h3>
  <input
  type="text"
  placeholder="عنواف الفكره "
@@ -164,11 +174,13 @@ const [isPopupOpen, setIsPopupOpen]=useState(false)
         </div>
 
         </div>
-        <button className="btn text-white bg-green-500" onClick={()=>setIsPopupOpen(true)}>New idea +</button>
 
-    <div className={`${styles.wrapper}flex flex-wrap  justify-center mt-4`}>
+    <div className={`${styles.wrapper}`}>
+    <button className="btn text-white bg-green-500" onClick={()=>setIsPopupOpen(true)}>New idea +</button>
+
         {ideas.map((idea)=>(
-        
+            <div className="flex-shrink-0 w-1/4 p-2" key={idea.id}>
+
                 <Card
                 key={idea.id}
                 username={idea.username}
@@ -176,10 +188,39 @@ const [isPopupOpen, setIsPopupOpen]=useState(false)
                 title={idea.title}
                 description={idea.description}
                 />
+,<button onClick={()=>{setEditeIdea(idea)}}>Edit</button>
+</div>
 
-            
         ))}
+{editIdea &&(
+<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+<div className="bg-white p-4 rounded shadow-lg relative">
+<button 
+className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+onClick={()=>setEditeIdea(null)}
+>
 
+&times;
+</button>
+<h3 className={`${styles.heading3}`}>Edit Idea</h3>
+ <input
+ type="text"
+ placeholder="عنواف الفكره "
+ value={editIdea.title}
+ onChange={(e)=>{setEditeIdea({...editIdea,title:e.target.value})}}
+ 
+ />
+ <textarea
+ placeholder=",وصف الفكره"
+ value={newIdea.description}
+ onChange={(e)=>setEditeIdea({...editIdea,description:e.target.value})}
+ 
+ />
+ <button onClick={addIdea}>update Idea</button>
+</div>
+</div>
+
+)}
     </div>
     </main>
   );
