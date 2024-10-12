@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaGithub } from "react-icons/fa"; 
 import LogoDark from "../assets/logo/logo-light.png";
-import DiscordIcon from "../assets/Foot-image/discord-icon.png";
-import TwitterIcon from "../assets/Foot-image/twitter-icon.png";
-import LinkedinIcon from "../assets/Foot-image/linkedin-icon.png";
-import SnapchatIcon from "../assets/Foot-image/snapchat-icon.png";
-import YoutubeIcon from "../assets/Foot-image/youtube-icon.png";
-import LogoCompanyIcon from "../assets/Foot-image/Logo-1.png";
+import DiscordIcon from "../assets/Foototer-mage/discord-icon.png";
+import TwitterIcon from "../assets/Foototer-mage/twitter-icon.png";
+import LinkedinIcon from "../assets/Foototer-mage/linkedin-icon.png";
+import SnapchatIcon from "../assets/Foototer-mage/snapchat-icon.png";
+import YoutubeIcon from "../assets/Foototer-mage/youtube-icon.png";
+import LogoCompanyIcon from "../assets/Foototer-mage/Logo-1.png";
 
 import styles from "../styles";
 
