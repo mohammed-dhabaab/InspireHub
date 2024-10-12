@@ -23,6 +23,16 @@ const styles = {
     secondaryButton: `py-[10px] px-8 text-xs font-semibold text-light-primary border border-solid border-light-primary hover:bg-light-primary hover:text-dark ${mainTransition}`,
     ghostButton: "bg-slate-800 hover:bg-slate-700 text-white py-2 px-6 rounded-md transition-all ease-in-out duration-500",
 
+    newCard: "bg-gray-50",
+    acceptableCard: "bg-green-200",
+    rejectedCard: "bg-yellow-200",
+    editedCard: "bg-blue-200",
+
+    rejectButton: `h-fit text-yellow-400 border border-yellow-400 hover:bg-yellow-400 hover:text-white font-medium px-3 py-1 rounded-full ${mainTransition}`,
+    deleteButton: `h-fit text-red-400 border border-red-400 hover:bg-red-400 hover:text-white font-medium px-3 py-1 rounded-full ${mainTransition}`,
+    acceptButton: `h-fit text-green-400 border border-green-400 hover:bg-green-400 hover:text-white font-medium px-3 py-1 rounded-full ${mainTransition}`,
+    confirmButton: `text-blue-400 border border-blue-400 hover:bg-blue-400 hover:text-white font-medium px-3 py-1 rounded-full ${mainTransition}`,
+    cancelButton: `text-red-400 border border-red-400 hover:bg-red-400 hover:text-white font-medium px-3 py-1 rounded-full ${mainTransition}`,
     transition500: `${mainTransition}`
 }
 
