@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         )
     },
     {
-        path: '/studentideas',
+        path: '/studentideas/:id',
         errorElement: <ErrorPage />,
         element: (
             <>
