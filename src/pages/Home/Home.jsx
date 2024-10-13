@@ -4,6 +4,8 @@ import styles from "../../styles";
 import searchForTerm from "../../utils/searchForTerm";
 import { FaRegEdit } from "react-icons/fa";
 import ideasphoto from "../../assets/Home/ideaphoto.png"
+import ideaedit from "../../assets/Home/editidea.png"
+
 function Home() {
   const [ideas, setIdeas] = useState([
 
@@ -205,7 +207,11 @@ onClick={()=>setEditeIdea(null)}
 
 &times;
 </button>
-<h3 className={`${styles.heading3}`}>Edit Idea</h3>
+<div className="flex flex-wrap items-center ">
+<div className="mt-4">
+<h4 className={`${styles.heading4} bg-primary text-white p-2`}>Edit Idea</h4>
+<label>Title</label>
+
  <input
  type="text"
  placeholder="عنواف الفكره "
@@ -213,6 +219,8 @@ onClick={()=>setEditeIdea(null)}
  onChange={(e)=>{setEditeIdea({...editIdea,title:e.target.value})}}
  className={`${styles.input}`}
  />
+  <br/>
+  <label>description</label>
  <textarea
  placeholder=",وصف الفكره"
  value={editIdea.description}
@@ -220,10 +228,17 @@ onClick={()=>setEditeIdea(null)}
  className={`${styles.input}`}
 
  />
- <button onClick={updateIdea}>update Idea</button>
+ <button onClick={updateIdea} className={`${styles.paragraph4} bg-secondary p-2 rounded-full mt-2 w-full`}>update Idea</button>
+</div>
+<div className="w-96 h-96">
+ <img
+src={ideaedit}
+className="w-full h-full flip- "
+/>
 </div>
 </div>
-
+</div>
+</div>
 )}
     </div>
     </main>
