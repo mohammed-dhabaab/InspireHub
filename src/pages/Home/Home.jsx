@@ -3,7 +3,7 @@ import Card from "../../components/Card";
 import styles from "../../styles";
 import searchForTerm from "../../utils/searchForTerm";
 import { FaRegEdit } from "react-icons/fa";
-
+import ideasphoto from "../../assets/Home/ideaphoto.png"
 function Home() {
   const [ideas, setIdeas] = useState([
 
@@ -131,31 +131,46 @@ const [activeTap , setActiveTap]=useState("myIdeas")
         {isPopupOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
 
- <div className="bg-white p-4 rounded shadow-lg relative">
+ <div className="bg-white p-8 rounded shadow-lg relative ">
  <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
               onClick={() => setIsPopupOpen(false)}
             >
                  &times;
                  </button>
-    <h3 className={`${styles.heading3}`}>Add new idea</h3>
+    <div className="flex flex-wrap items-center ">
+    <div className="mt-4">
+    <h4 className={`${styles.heading4} bg-primary text-white p-2`}>Add new idea</h4>
+        <label>Title</label>
  <input
  type="text"
- placeholder="عنواف الفكره "
+ placeholder="title idea"
  value={newIdea.title}
  onChange={(e)=>{setNewIdea({...newIdea,title:e.target.value})}}
- className={`${styles.input}`}
+ className={`${styles.input} mb-4 `}
 
  />
+ <br/>
+ <label>description</label>
+
  <textarea
- placeholder=",وصف الفكره"
+ placeholder="descripation the idea"
  value={newIdea.description}
  onChange={(e)=>setNewIdea({...newIdea,description:e.target.value})}
- className={`${styles.input}`}
+ className={`${styles.input} mb-4`}
 
  />
- <button onClick={addIdea}>add new idea</button>
+ <button onClick={addIdea} className={`${styles.paragraph4} bg-secondary p-2 rounded-full mt-2 w-full`}>add new idea</button>
+ </div>
+ <div className="w-96 h-96">
+ <img
+src={ideasphoto}
+className="w-full h-full flip- "
+/>
 </div>
+</div>
+</div>
+
 </div>
         )}
        
