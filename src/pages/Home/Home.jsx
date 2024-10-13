@@ -6,7 +6,7 @@ import searchForTerm from "../../utils/searchForTerm";
 import { FaRegEdit } from "react-icons/fa";
 import ideasphoto from "../../assets/Home/ideaphoto.png";
 import ideaedit from "../../assets/Home/editidea.png";
-
+import { IoAddCircleOutline } from "react-icons/io5";
 function Home() {
   const [ideas, setIdeas] = useState([]);
   const [filteredArr, setFiltredArr] = useState([]);
@@ -132,6 +132,7 @@ console.log(allideass);
       setFiltredArr(results);
 
   },[searchTerm ,ideas])
+  const displayedIdeas = searchTerm ? filteredArr : fitredIdeas;
 
   return (
     <main className={`${styles.outerWrapper} `}>
@@ -181,21 +182,23 @@ console.log(allideass);
       <div className={`${styles.wrapper} flex justify-between`}>
         {isPopupOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded shadow-lg relative ">
+            <div className="bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
               <button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
                 onClick={() => setIsPopupOpen(false)}
               >
                 &times;
               </button>
-              <div className="flex flex-wrap items-center ">
-                <div className="mt-4">
+              <div className="flex flex-wrap ">
+                <div className=" flex flex-col justify-around flex-wrap">
                   <h4
-                    className={`${styles.heading4} bg-primary text-white p-2`}
+                    className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
                   >
                     Add new idea
                   </h4>
-                  <label>Title</label>
+                  <div>
+
+                  <label className="fint-bold text-xl">Title</label>
                   <input
                     type="text"
                     placeholder="title idea"
@@ -203,10 +206,12 @@ console.log(allideass);
                     onChange={(e) => {
                       setNewIdea({ ...newIdea, title: e.target.value });
                     }}
-                    className={`${styles.input} mb-4 `}
+                    className={`${styles.input} `}
                   />
+                  </div>
                   <br />
-                  <label>description</label>
+                  <div>
+                  <label className="fint-bold text-xl">description</label>
 
                   <textarea
                     placeholder="descripation the idea"
@@ -214,8 +219,9 @@ console.log(allideass);
                     onChange={(e) =>
                       setNewIdea({ ...newIdea, description: e.target.value })
                     }
-                    className={`${styles.input} mb-4`}
+                    className={`${styles.input}`}
                   />
+                  </div>
                   <button
                     onClick={addIdea}
                     className={`${styles.paragraph4} bg-secondary p-2 rounded-full mt-2 w-full`}
@@ -224,7 +230,7 @@ console.log(allideass);
                   </button>
                 </div>
                 <div className="w-96 h-96">
-                  <img src={ideasphoto} className="w-full h-full flip- " />
+                  <img src={ideasphoto} className="w-full h-full  scale-x-[-1] " />
                 </div>
               </div>
             </div>
@@ -232,14 +238,16 @@ console.log(allideass);
         )}
       </div>
       <div className={`${styles.wrapper}`}>
+        <div className="">
         <button
-          className="btn text-white bg-primary p-2 rounded-full"
+          className="btn text-white bg-primary p-2 rounded-full flex flex-wrap gap-2 items-center"
           onClick={() => setIsPopupOpen(true)}
         >
-          New idea +
+           <span>New idea</span><IoAddCircleOutline className="w-7 h-7" />
         </button>
+        </div>
         <div className="flex flex-wrap justify-around gap-1">
-          {fitredIdeas.map((idea) => (
+          {displayedIdeas.map((idea) => (
             <div
               className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
               key={idea.id}
@@ -250,6 +258,7 @@ console.log(allideass);
                 imgprofile={idea.avatar}
                 title={idea.name}
                 description={idea.description}
+                reason={idea.reason}
                 onEdit={() => setEditeIdea(idea)}
                 buttonText={<FaRegEdit className="w-5 h-5" />}
                 status={idea.status}
@@ -259,21 +268,22 @@ console.log(allideass);
         </div>
         {editIdea && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-4 rounded shadow-lg relative">
+            <div className="bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
               <button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
                 onClick={() => setEditeIdea(null)}
               >
                 &times;
               </button>
-              <div className="flex flex-wrap items-center ">
-                <div className="mt-4">
+              <div className="flex flex-wrap ">
+                <div className="flex flex-col justify-around flex-wrap">
                   <h4
-                    className={`${styles.heading4} bg-primary text-white p-2`}
+                    className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
                   >
                     Edit Idea
                   </h4>
-                  <label>Title</label>
+                  <div>
+                  <label className="fint-bold text-xl">Title</label>
 
                   <input
                     type="text"
@@ -284,8 +294,10 @@ console.log(allideass);
                     }}
                     className={`${styles.input}`}
                   />
+                  </div>
                   <br />
-                  <label>description</label>
+                  <div>
+                  <label className="fint-bold text-xl">description</label>
                   <textarea
                     placeholder=",وصف الفكره"
                     value={editIdea.description}
@@ -294,15 +306,16 @@ console.log(allideass);
                     }
                     className={`${styles.input}`}
                   />
+                  </div>
                   <button
                     onClick={updateIdea}
-                    className={`${styles.paragraph4} bg-secondary p-2 rounded-full mt-2 w-full`}
+                    className={`${styles.paragraph4} bg-secondary p-2 rounded-full  w-full`}
                   >
                     update Idea
                   </button>
                 </div>
                 <div className="w-96 h-96">
-                  <img src={ideaedit} className="w-full h-full flip- " />
+                  <img src={ideaedit} className="w-full h-full  scale-x-[-1]  " />
                 </div>
               </div>
             </div>
