@@ -134,17 +134,17 @@ console.log(allideass);
   },[searchTerm ,ideas])
 
   return (
-    <main className={`${styles.outerWrapper}`}>
+    <main className={`${styles.outerWrapper} `}>
       <div className={`${styles.wrapper} flex justify-center text-primary`}>
-        <h2 className={`${styles.heading2}`}>Welcome Student <span className="text-secondary">{userInfo?.name}</span></h2>
+        <h2 className={`${styles.heading2} mb-4`}>Welcome Student <span className="text-secondary">{userInfo?.name}</span></h2>
       </div>
 
       <div className={`${styles.wrapper} flex justify-center`}>
         <div className="text-center">
-          <h3 className={styles.heading3}>Ideas</h3>
+          <h3 className={`${styles.heading3} mb-4`}>Ideas</h3>
           <div className="w-full">
             <div className="relative right-0">
-              <ul className="flex list-none">
+              <ul className="flex list-none ">
                 <li className="mr-4">
                   <button
                     className={`py-2 px-4 ${
@@ -278,7 +278,7 @@ console.log(allideass);
                   <input
                     type="text"
                     placeholder="عنواف الفكره "
-                    value={editIdea.title}
+                    value={editIdea.name}
                     onChange={(e) => {
                       setEditeIdea({ ...editIdea, title: e.target.value });
                     }}
