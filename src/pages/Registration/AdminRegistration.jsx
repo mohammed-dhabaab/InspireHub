@@ -68,12 +68,23 @@ function AdminRegistration() {
     setErrorMessage("");
   };
 
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      if (storedUser.role === "student") {
+        navigate("/home");
+      }
+    } else {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <div>
-      <div className="flex items-center justify-center h-screen bg-gradient-to-b from-secondary to-primary">
+      <div className="flex items-center justify-center w-full h-screen">
         <div
           className={`w-[37%] h-[78%] bg-[#eeecec] rounded-lg py-4 flex flex-col justify-center items-center 
-         max-md:w-[85%] max-md:h-[85%] `}
+         max-md:w-[85%] max-md:h-[72%] `}
         >
           <div className="flex flex-col justify-start items-center w-full h-[90%]">
             <form
@@ -139,7 +150,7 @@ function AdminRegistration() {
                   className="w-full rounded-md bg-[#4e3497] hover:bg-secondary-light-color hover:text-[#4e3497] text-white font-bold py-2 px-4 focus:outline-none "
                   type="submit"
                 >
-                  Sign in
+                  Add
                 </button>
               </div>
             </form>

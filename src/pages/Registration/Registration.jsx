@@ -85,7 +85,13 @@ function Registration() {
                     role: userExist[0].role,
                 };
                 localStorage.setItem("user", JSON.stringify(user));
-                navigate("/home");
+
+                if(userExist[0].role === 'admin'){
+                    navigate("/admin");
+                }else{
+                   navigate("/home");
+                }
+               
             } else {
                 setErrorMessage("Invalid email or password");
             }
@@ -126,7 +132,7 @@ function Registration() {
     <div>
       <div className="flex items-center justify-center h-screen bg-gradient-to-b from-secondary to-primary">
         <div className={`${!isFormActive ? "" : "hidden"} w-[70%] md:h-[85%] lg:h-[90%] bg-[#eeecec] rounded-lg flex justify-between items-center
-        max-sm:flex-col max-sm:h-[82%] max-md:[85%] max-md:py-4`}>
+        max-sm:flex-col max-sm:h-[72%] max-md:w-[85%] max-md:py-4`}>
             <div className="w-[55%] h-full flex flex-col justify-center items-center px-2
             max-sm:w-full max-sm:justify-start max-sm:h-[50%]">
                 <div className={`${styles.heading2} text-black font-IBM text-center py-1`} >
@@ -157,8 +163,8 @@ function Registration() {
             </div>
         </div>
          <div className={`${isFormActive ? "" : "hidden"} w-[37%] h-[78%] bg-[#eeecec] rounded-lg py-4 flex flex-col justify-center items-center 
-         max-md:w-[85%] max-md:h-[85%] `}>
-            <div className='self-start pl-2'>
+          max-md:w-[85%] max-md:h-[72%] `}>
+            <div className='self-start pl-2 max-md:pl-10'>
             <IoArrowBackCircle onClick={()=>{setIsFormActive(false),clear()}} className='w-[8vw] h-[8vh]
              text-secondary-light-color hover:text-primary cursor-pointer
              max-sm:w-[10vw] max-sm:h-[10vh] '/>
