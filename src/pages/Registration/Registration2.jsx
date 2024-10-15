@@ -12,6 +12,7 @@ function Registration() {
     const [fullname, setFullname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState('student');
     const [errorMessage, setErrorMessage] = useState('');
     const apiUrl = 'https://670941a3af1a3998baa0ec5c.mockapi.io/users';
     const navigate = useNavigate();
@@ -25,9 +26,16 @@ function Registration() {
             setErrorMessage("Full Name must be more than 3 letters");
             return;
         }
-        if (!emailRegex.test(email) || !email.toLowerCase().includes('tuwaiq')) {
-            setErrorMessage("Email must be valid and contain the term 'tuwaiq'");
-            return;
+        if (userType === 'student') {
+            if (!emailRegex.test(email) || !email.toLowerCase().includes('tuwaiq')) {
+                setErrorMessage("Email must be valid and contain the term 'tuwaiq'");
+                return;
+            }
+        } else if (userType === 'admin') {
+            if (!emailRegex.test(email)) {
+                setErrorMessage("Email must be valid");
+                return;
+            }
         }
         if (password.length <= 4 || !upperRegex.test(password)) {
             setErrorMessage("Password must be more than 4 letters and contain one uppercase letter");
@@ -46,7 +54,7 @@ function Registration() {
                     email: email,
                     password: password,
                     numberOfIdeas: [],
-                    role: 'student',
+                    role: userType,
                 });
     
                 const user = {
@@ -85,13 +93,7 @@ function Registration() {
                     role: userExist[0].role,
                 };
                 localStorage.setItem("user", JSON.stringify(user));
-
-                if(userExist[0].role === 'admin'){
-                    navigate("/admin");
-                }else{
-                   navigate("/home");
-                }
-               
+                navigate("/home");
             } else {
                 setErrorMessage("Invalid email or password");
             }
@@ -132,7 +134,7 @@ function Registration() {
     <div>
       <div className="flex items-center justify-center h-screen bg-gradient-to-b from-secondary to-primary">
         <div className={`${!isFormActive ? "" : "hidden"} w-[70%] md:h-[85%] lg:h-[90%] bg-[#eeecec] rounded-lg flex justify-between items-center
-        max-sm:flex-col max-sm:h-[72%] max-md:w-[85%] max-md:py-4`}>
+        max-sm:flex-col max-sm:h-[82%] max-md:[85%] max-md:py-4`}>
             <div className="w-[55%] h-full flex flex-col justify-center items-center px-2
             max-sm:w-full max-sm:justify-start max-sm:h-[50%]">
                 <div className={`${styles.heading2} text-black font-IBM text-center py-1`} >
@@ -151,28 +153,31 @@ function Registration() {
             <div className=" w-[45%] h-full flex justify-center items-center
             max-sm:w-full max-sm:items-start max-sm:h-[40%]">
                 <div className=' w-[80%] h-[50%] flex flex-col justify-center items-center gap-1'>
-                      <div className={`${styles.heading5}`}>Join us</div>
-                    <button onClick={() => { setIsFormActive(true); toggleFormSignin(); }} className={`${styles.primaryButton} w-[80%] rounded-xl hover:text-secondary-light-color`}>Sign In</button>
+                      <div className={`${styles.heading5}`}>Join us as:</div>
+                    <button onClick={()=>{setIsFormActive(true),setUserType('admin')}} className={`${styles.primaryButton} w-[80%] rounded-xl hover:text-secondary-light-color`}>Admin</button>
                     <div className="flex items-center w-[80%]">
                         <hr className="flex-grow border-t border-gray-300" />
                         <span className="mx-2 text-gray-500">or</span>
                         <hr className="flex-grow border-t border-gray-300" />
                     </div>
-                    <button onClick={() => { setIsFormActive(true); toggleFormsLogin(); }} className={`${styles.primaryButton} w-[80%] rounded-xl hover:text-secondary-light-color `}>Login</button>
+                    <button onClick={()=>{setIsFormActive(true),setUserType('student')}} className={`${styles.primaryButton} w-[80%] rounded-xl hover:text-secondary-light-color `}>Student</button>
                 </div>
             </div>
         </div>
          <div className={`${isFormActive ? "" : "hidden"} w-[37%] h-[78%] bg-[#eeecec] rounded-lg py-4 flex flex-col justify-center items-center 
-          max-md:w-[85%] max-md:h-[72%] `}>
-            <div className='self-start pl-2 max-md:pl-10'>
+         max-md:w-[85%] max-md:h-[85%] `}>
+            <div className='self-start pl-6 pb-2'>
             <IoArrowBackCircle onClick={()=>{setIsFormActive(false),clear()}} className='w-[8vw] h-[8vh]
              text-secondary-light-color hover:text-primary cursor-pointer
              max-sm:w-[10vw] max-sm:h-[10vh] '/>
             </div>
-            <div className='flex flex-col justify-start items-center w-full h-[90%]'>
-            <form className={`${isSigninActive? "" : "hidden"} w-[70%] p-4 max-md:w-[80%]`}
+            <div className='flex flex-col justify-start items-center w-full h-[90%]  gap-6'>
+            <div className='bg-secondary-light-color w-[65%] h-[9%] rounded-full max-md:w-[75%]'>
+                <button onClick={toggleFormSignin} className={`${isSigninActive ? "bg-primary text-white" : ""} w-[50%] rounded-l-full h-full border-r border-thirdly-light-color`}>Sign In</button>
+                <button onClick={toggleFormsLogin}  className={`${!isSigninActive ? "bg-primary text-white" : ""} w-[50%] rounded-r-full h-full`}>Login</button>
+            </div>
+            <form className={`${isSigninActive ? "" : "hidden"} w-[70%]   p-4 max-md:w-[80%]`}
             onSubmit={handleSignin}>
-             <h1 className={`${styles.heading4} text-primary text-center mb-4`}>Sign In</h1>
             <div> 
                 <label htmlFor="fullname" className='inputLabel' >Full Name</label>
                             <input className="w-full text-black py-2 px-3 border rounded-xl focus:outline-slate-200"
@@ -219,10 +224,12 @@ function Registration() {
                                 Sign in
                             </button>
                         </div>
+             
+
+           
             </form>
-            <form className={`${isLoginActive  ? "" : "hidden"} w-[70%]  p-4 max-md:w-[80%]`}
+            <form className={`${isLoginActive ? "" : "hidden"} w-[70%]  p-4 max-md:w-[80%]`}
             onSubmit={handleLogin}>
-             <h1 className={`${styles.heading4} text-primary text-center mb-4`}>Login</h1>
              <div> 
                 <label htmlFor="email2" className='inputLabel' >Email</label>
                             <input className="w-full text-black py-2 px-3 border rounded-xl focus:outline-slate-200"

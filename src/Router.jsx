@@ -7,6 +7,7 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Admin from './pages/Admin/Admin';
 import StudentIdeas from './pages/StudentIdeas/StudentIdeas';
 import Ideas from './pages/Ideas/Ideas';
+import AdminRegistration from './pages/Registration/AdminRegistration';
 
 
 const router = createBrowserRouter([
@@ -59,6 +60,18 @@ const router = createBrowserRouter([
                 <ScrollRestoration />
                 <Navbar />
                 <Ideas />
+                <Footer />
+            </>
+        )
+    },
+    {
+        path: '/addAdmin',
+        errorElement: <ErrorPage />,
+        element: (
+            <>
+                <ScrollRestoration />
+                <Navbar />
+                <AdminRegistration />
                 <Footer />
             </>
         )
