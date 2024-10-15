@@ -9,10 +9,11 @@ function AdminRegistration() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const apiUrl = "https://670941a3af1a3998baa0ec5c.mockapi.io/users";
   const navigate = useNavigate();
   const upperRegex = /[A-Z]/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
+  const apiUrl = import.meta.env.VITE_USERS_API;
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -69,7 +70,7 @@ function AdminRegistration() {
   };
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
     if (storedUser) {
       if (storedUser.role === "student") {
         navigate("/home");
