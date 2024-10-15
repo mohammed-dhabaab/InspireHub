@@ -7,7 +7,10 @@ import { FaRegEdit } from "react-icons/fa";
 import ideasphoto from "../../assets/Home/ideaphoto.png";
 import ideaedit from "../../assets/Home/editidea.png";
 import { IoAddCircleOutline } from "react-icons/io5";
+import { IoIosClose } from "react-icons/io";
+
 function Home() {
+  const [allStudentsIdeas, setAllStudentsIdeas] = useState([])
   const [ideas, setIdeas] = useState([]);
   const [filteredArr, setFiltredArr] = useState([]);
   const [searchTerm, setSerachTerm] = useState("");
@@ -21,24 +24,16 @@ function Home() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [editIdea, setEditeIdea] = useState(null);
   const [activeTap, setActiveTap] = useState("myIdeas");
+  const USER_ID = JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).id;
+  const VITE_IDEAS_API = import.meta.env.VITE_IDEAS_API
+  const VITE_USERS_API = import.meta.env.VITE_USERS_API
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userResponse = await axios.get(
-          "https://670941a3af1a3998baa0ec5c.mockapi.io/users"
-        );
-        console.log("User response:", userResponse.data);
-        if (userResponse.data.length > 0) {
-          const userData = userResponse.data[2]
-          console.log(userData);
-
-          setUserInfo(userData);
-          setNewIdea((prev) => ({ ...prev, studentId: userData.StudentId, avatar: userData.avatar }));
-        } else {
-          console.log("no user data found");
-
-        }
+        const usersResponse = await axios.get(`${VITE_USERS_API}/${USER_ID}`);
+        const data = usersResponse.data
+        setUserInfo(data)
 
       } catch (error) {
         console.log("Error fetching user data:", error);
@@ -48,60 +43,64 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    const fetchIdeas = async () => {
+    const fetchCurrentUserIdeas = async () => {
       if (!userInfo) {
-        console.log("User info is not available yet.");
         return;
       }
       try {
-        const response = await axios.get("https://670941a3af1a3998baa0ec5c.mockapi.io/ideas")
-        const allideass = response.data
-        const StudentId = userInfo.StudentId
-        console.log(allideass);
+        const ideasResponse = await axios.get(VITE_IDEAS_API)
+        const allIdeas = ideasResponse.data
+        const usersResponse = await axios.get(VITE_USERS_API)
+        const allUsers = usersResponse.data
 
-        const StudentIdeas = allideass.filter(idea =>
-          idea.StudentId === StudentId)
-        console.log("Filtered ideas:", StudentIdeas);
+        const allAcceptedIdeas = allIdeas.filter(idea => idea.status === "Acceptable")
 
-        const ideasWithUsernames = StudentIdeas.map(idea => {
-          // const user = userInfo;
-          // console.log(user);
+        const acceptedIdeasWithUserInfo = allAcceptedIdeas.map(idea => {
+          return {
+            ...idea,
+            username: allUsers.find(user => user.id === idea.studentId)?.name || "Unknown User",
+            avatar: allUsers.find(user => user.id === idea.studentId)?.avatar || "https://via.placeholder.com/150",
+            status: idea.status || ""
+          }
+        })
 
+        const studentIdeas = allIdeas.filter(idea => idea.studentId === userInfo.studentId)
+
+        const studentIdeasWithUserInfo = studentIdeas.map(idea => {
           return {
             ...idea,
             username: userInfo.name,
             avatar: userInfo.avatar,
-            status: idea.status || 'default'
-
-
+            status: idea.status || ""
           }
         })
-        console.log(ideasWithUsernames);
 
-        setIdeas(ideasWithUsernames)
+        setAllStudentsIdeas(acceptedIdeasWithUserInfo)
+        setIdeas(studentIdeasWithUserInfo)
       } catch (error) {
         console.error("Error fetching ideas:", error);
       }
     }
-    fetchIdeas();
+    fetchCurrentUserIdeas();
   }, [userInfo])
 
 
   const addIdea = async () => {
-    if (newIdea.title && newIdea.description) {
+    if (newIdea.name && newIdea.description) {
       const userId = userInfo.id
 
-      const ideatoAdd = { ...newIdea, userId }
+      const ideatoAdd = { ...newIdea, studentId: userId }
       try {
-        const response = await axios.post("https://670941a3af1a3998baa0ec5c.mockapi.io/ideas", ideatoAdd)
+        const response = await axios.post(VITE_IDEAS_API, ideatoAdd)
         setIdeas([...ideas, response.data]);
         setFiltredArr([...filteredArr, response.data]);
         setNewIdea({
           name: "",
           description: "",
-          studentId: userData.StudentId,
+          studentId: userData.studentId,
           avatar: newIdea.avatar,
         });
+
         setIsPopupOpen(false);
       } catch (error) {
         console.error("Error adding idea:", error);
@@ -112,7 +111,7 @@ function Home() {
   const updateIdea = async () => {
     if (editIdea.name && editIdea.description) {
       try {
-        const response = await axios.put(`https://670941a3af1a3998baa0ec5c.mockapi.io/ideas/${editIdea.id}`, editIdea)
+        const response = await axios.put(`${VITE_IDEAS_API}/${editIdea.id}`, editIdea)
         setIdeas(
           ideas.map((idea) => (idea.id === editIdea.id ? response.data : idea))
         );
@@ -124,7 +123,7 @@ function Home() {
 
   };
   const fitredIdeas = activeTap === "AllIdeas"
-    ? ideas.filter(idea => idea.status === "Acceptable")
+    ? allStudentsIdeas
     : ideas.filter(idea => idea.StudentId === userInfo.StudentId)
 
   useEffect(() => {
@@ -152,7 +151,7 @@ function Home() {
                       }`}
                     onClick={() => setActiveTap("myIdeas")}
                   >
-                    my ideas
+                    My Ideas
                   </button>
                 </li>
                 <li>
@@ -161,7 +160,7 @@ function Home() {
                       }`}
                     onClick={() => setActiveTap("AllIdeas")}
                   >
-                    All ideas
+                    All Ideas
                   </button>
                 </li>
               </ul>
@@ -182,49 +181,51 @@ function Home() {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
               <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                className={`absolute top-2 right-2 text-gray-500 hover:text-gray-800 ${styles.transition500}`}
                 onClick={() => setIsPopupOpen(false)}
               >
-                &times;
+                <IoIosClose className="w-10 h-10" />
               </button>
               <div className="flex flex-wrap ">
                 <div className=" flex flex-col justify-around flex-wrap">
                   <h4
                     className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
                   >
-                    Add new idea
+                    Add New Idea
                   </h4>
                   <div>
 
                     <label className="fint-bold text-xl">Title</label>
                     <input
                       type="text"
-                      placeholder="title idea"
-                      value={newIdea.title}
+                      maxLength={30}
+                      placeholder="Title Idea"
+                      value={newIdea.name}
                       onChange={(e) => {
-                        setNewIdea({ ...newIdea, title: e.target.value });
+                        setNewIdea({ ...newIdea, name: e.target.value });
                       }}
                       className={`${styles.input} `}
                     />
                   </div>
                   <br />
                   <div>
-                    <label className="fint-bold text-xl">description</label>
+                    <label className="fint-bold text-xl">Description</label>
 
                     <textarea
-                      placeholder="descripation the idea"
+                      placeholder="Description of the idea (150 letters)"
+                      maxLength={"150"}
                       value={newIdea.description}
                       onChange={(e) =>
                         setNewIdea({ ...newIdea, description: e.target.value })
                       }
-                      className={`${styles.input}`}
+                      className={`${styles.input} resize-none`}
                     />
                   </div>
                   <button
                     onClick={addIdea}
                     className={`${styles.paragraph4} bg-secondary p-2 rounded-full mt-2 w-full`}
                   >
-                    add new idea
+                    Add New Idea
                   </button>
                 </div>
                 <div className="w-96 h-96">
@@ -245,12 +246,13 @@ function Home() {
           </button>
         </div>
         <div className="flex flex-wrap justify-around gap-1">
-          {displayedIdeas.map((idea) => (
+          {displayedIdeas.slice().reverse().map((idea) => (
             <div
               className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
               key={idea.id}
             >
               <Card
+                idea={idea}
                 key={idea.id}
                 username={idea.username}
                 imgprofile={idea.avatar}
@@ -260,6 +262,7 @@ function Home() {
                 onEdit={() => setEditeIdea(idea)}
                 buttonText={<FaRegEdit className="w-5 h-5" />}
                 status={idea.status}
+                isUserCard={idea.studentId == USER_ID}
               />
             </div>
           ))}
