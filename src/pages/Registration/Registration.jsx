@@ -13,10 +13,13 @@ function Registration() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const apiUrl = 'https://670941a3af1a3998baa0ec5c.mockapi.io/users';
     const navigate = useNavigate();
     const upperRegex = /[A-Z]/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
+    const apiUrl = import.meta.env.VITE_USERS_API;
+
+
 
     const handleSignin = async (e) => {
         e.preventDefault();
@@ -55,7 +58,7 @@ function Registration() {
                     numberOfIdeas: newUserResponse.data.numberOfIdeas,
                     role: newUserResponse.data.role,
                 };
-                localStorage.setItem("user", JSON.stringify(user));
+                localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(USER_LOCAL_STORGE));
                 navigate("/home");
             } else {
                 setErrorMessage('The email is already being used');
@@ -84,7 +87,7 @@ function Registration() {
                     numberOfIdeas: userExist[0].numberOfIdeas,
                     role: userExist[0].role,
                 };
-                localStorage.setItem("user", JSON.stringify(user));
+                localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(USER_LOCAL_STORGE));
 
                 if(userExist[0].role === 'admin'){
                     navigate("/admin");
@@ -106,8 +109,8 @@ function Registration() {
     }, [email, password,fullname])
 
     useEffect(() => {
-        if(localStorage.getItem('user')){
-            localStorage.removeItem('user');
+        if(localStorage.getItem(USER_LOCAL_STORGE)){
+            localStorage.removeItem(USER_LOCAL_STORGE);
         }
     }, [])
 
