@@ -64,7 +64,10 @@ function Home() {
           }
         })
 
-        const studentIdeas = allIdeas.filter(idea => idea.studentId === userInfo.studentId)
+        const studentIdeas = allIdeas.filter(idea => idea.studentId === USER_ID)
+
+console.log(studentIdeas);
+
 
         const studentIdeasWithUserInfo = studentIdeas.map(idea => {
           return {
@@ -97,7 +100,7 @@ function Home() {
         setNewIdea({
           name: "",
           description: "",
-          studentId: userData.studentId,
+          studentId: USER_ID,
           avatar: newIdea.avatar,
         });
 
