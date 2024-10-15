@@ -1,103 +1,125 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { BiSearch } from "react-icons/bi";
+import { IoIosSearch } from "react-icons/io";
 import styles from "../../styles";
 import searchForTerm from "../../utils/searchForTerm";
+import DeleteModel from "./DeleteModel"; 
 
 function Admin() {
-  const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [students, setStudents] = useState([]); 
+  const [searchInput, setSearchInput] = useState(""); 
+  const [isDialogOpen, setIsDialogOpen] = useState(false); 
+  const [studentIdToRemove, setStudentIdToRemove] = useState(null); 
   const navigate = useNavigate();
 
-  const apiUrl = import.meta.env.VITE_USERS_API;
+  const userApiUrl = import.meta.env.VITE_USERS_API;
   const ideasApiUrl = import.meta.env.VITE_IDEAS_API;
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchStudents = async () => {
       try {
-        const response = await axios.get(apiUrl);
-        setUsers(response.data);
+        const response = await axios.get(userApiUrl);
+        setStudents(response.data);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching students:", error);
       }
     };
-    fetchUsers();
-  }, [apiUrl]);
+    fetchStudents();
+  }, [userApiUrl]);
 
-  const handleDelete = async (id) => {
+  const handleRemove = async (id) => {
     try {
-      await axios.delete(`${apiUrl}/${id}`);
+      await axios.delete(`${userApiUrl}/${id}`);
 
       const ideasResponse = await axios.get(ideasApiUrl);
       const ideas = ideasResponse.data;
-      const userIdeas = ideas.filter((idea) => idea.studentId === id);
+      const studentIdeas = ideas.filter((idea) => idea.studentId === id);
       await Promise.all(
-        userIdeas.map(async (idea) => {
+        studentIdeas.map(async (idea) => {
           await axios.delete(`${ideasApiUrl}/${idea.id}`);
         })
       );
 
-      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-      console.log("User and related ideas deleted successfully");
+      setStudents((prevStudents) => prevStudents.filter((student) => student.id !== id));
+      console.log("Student and related ideas removed successfully");
     } catch (error) {
-      console.error("Error deleting user and ideas:", error);
+      console.error("Error removing student and ideas:", error);
     }
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
   };
 
-  const handleCardClick = (id) => {
+  const handleStudentCardClick = (id) => {
     navigate(`/studentideas/${id}`);
+  };
+
+  const openConfirmationDialog = (id) => {
+    setStudentIdToRemove(id);
+    setIsDialogOpen(true);
+  };
+
+  const confirmRemoval = () => {
+    if (studentIdToRemove) {
+      handleRemove(studentIdToRemove);
+    }
+    setIsDialogOpen(false);
+    setStudentIdToRemove(null);
+  };
+
+  const cancelRemoval = () => {
+    setIsDialogOpen(false);
+    setStudentIdToRemove(null);
   };
 
   return (
     <main className={styles.outerWrapper}>
       <div className={styles.wrapper}>
         <div className="space-y-8 mb-12">
-          <h3 className={`${styles.heading3} text-center`}>Students Ideas</h3>
-          <div className="relative flex justify-center">
-           
-            
-            <BiSearch
-              className="absolute lg:left-[56%] md:left-[58%] left-[65%]  top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={20}
-            />
-            <input
-              type="text"
-              className={`${styles.Search} `} 
-              placeholder="Search"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              
-            />
+          
+          <h3
+            className={`${styles.heading3} text-center text-blue-900 font-extrabold text-4xl md:text-5xl lg:text-6xl tracking-wide`}
+            style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}
+          >
+            Student Ideas
+          </h3>
 
-           
+          <div className="mb-6 w-fit mx-auto flex items-center border border-gray-300 rounded-full px-4 py-2 shadow-md">
+            <input
+              onChange={handleSearchInputChange}
+              value={searchInput}
+              className="w-full outline-none px-4 py-2"
+              type="search"
+              placeholder="Search ideas..."
+            />
+            <IoIosSearch size={20} className="text-secondary-light-color ml-2" />
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {users
-            .filter((user) => user.role === "student")
-            .filter((user) => searchForTerm(searchTerm, [user]).length > 0)
-            .map((user) => (
+          {students
+            .filter((student) => student.role === "student")
+            .filter((student) => searchForTerm(searchInput, [student]).length > 0)
+            .map((student) => (
               <div
-                key={user.id}
-                onClick={() => handleCardClick(user.id)}
-                className="cursor-pointer flex items-center justify-between border border-solid border-gray-300 rounded-lg px-6 py-3"
+                key={student.id}
+                onClick={() => handleStudentCardClick(student.id)}
+                className="cursor-pointer flex items-center justify-between border-b-4 border-r-4 border-gray-300 rounded-lg px-6 py-4 bg-white hover:bg-blue-50 transition duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
                 <div className="flex items-center space-x-4">
                   <img
-                    className="rounded-full w-9 h-9"
-                    src={user.avatar}
-                    alt={user.name}
+                    className="rounded-full w-12 h-12"
+                    src={student.avatar}
+                    alt={student.name}
                   />
                   <div>
-                    <p className={styles.paragraph3}>{user.name}</p>
-                    <p className={styles.paragraph4}>
-                      Number of ideas: {user.numberOfIdeas}
+                    <p className={`${styles.paragraph3} text-blue-800 font-semibold`}>
+                      {student.name}
+                    </p>
+                    <p className={`${styles.paragraph4} text-blue-600`}>
+                      Number of ideas: {student.numberOfIdeas}
                     </p>
                   </div>
                 </div>
@@ -105,13 +127,21 @@ function Admin() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDelete(user.id);
+                    openConfirmationDialog(student.id); 
                   }}
-                  className="bg-[#f42525] w-8 h-8 rounded-lg"
-                ></button>
+                  className="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition duration-200"
+                >
+                  <span className="text-white font-bold">X</span>
+                </button>
               </div>
             ))}
         </div>
+
+        <DeleteModel
+          isOpen={isDialogOpen}
+          onConfirm={confirmRemoval}
+          onClose={cancelRemoval}
+        />
       </div>
     </main>
   );
