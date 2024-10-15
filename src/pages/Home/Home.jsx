@@ -13,9 +13,9 @@ function Home() {
   const [searchTerm, setSerachTerm] = useState("");
   const [userInfo, setUserInfo] = useState(null);
   const [newIdea, setNewIdea] = useState({
-    title: "",
-    description: "",
     name: "",
+    description: "",
+    studentId: "",
     avatar: "",
   });
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -34,7 +34,7 @@ function Home() {
             console.log(userData);
             
             setUserInfo(userData);
-            setNewIdea((prev) => ({ ...prev, name: userData.name ,avatar:userData.avatar }));
+            setNewIdea((prev) => ({ ...prev,studentId: userData.StudentId ,avatar:userData.avatar }));
         }else{
             console.log("no user data found");
             
@@ -97,9 +97,9 @@ console.log(allideass);
             setIdeas([...ideas,response.data]);
       setFiltredArr([...filteredArr ,response.data]);
       setNewIdea({
-        title: "",
+        name: "",
         description: "",
-        name: newIdea.name,
+        studentId: userData.StudentId,
         avatar: newIdea.avatar,
       });
       setIsPopupOpen(false);
@@ -110,7 +110,7 @@ console.log(allideass);
     }
   };
   const updateIdea = async () => {
-    if (editIdea.title && editIdea.description) {
+    if (editIdea.name && editIdea.description) {
         try{
             const response = await axios.put(`https://670941a3af1a3998baa0ec5c.mockapi.io/ideas/${editIdea.id}`,editIdea)
             setIdeas(
@@ -290,7 +290,7 @@ console.log(allideass);
                     placeholder="عنواف الفكره "
                     value={editIdea.name}
                     onChange={(e) => {
-                      setEditeIdea({ ...editIdea, title: e.target.value });
+                      setEditeIdea({ ...editIdea, name: e.target.value });
                     }}
                     className={`${styles.input}`}
                   />
