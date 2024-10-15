@@ -29,17 +29,17 @@ function Home() {
           "https://670941a3af1a3998baa0ec5c.mockapi.io/users"
         );
         console.log("User response:", userResponse.data);
-        if(userResponse.data.length >0){
-            const userData = userResponse.data[2]
-            console.log(userData);
-            
-            setUserInfo(userData);
-            setNewIdea((prev) => ({ ...prev,studentId: userData.StudentId ,avatar:userData.avatar }));
-        }else{
-            console.log("no user data found");
-            
+        if (userResponse.data.length > 0) {
+          const userData = userResponse.data[2]
+          console.log(userData);
+
+          setUserInfo(userData);
+          setNewIdea((prev) => ({ ...prev, studentId: userData.StudentId, avatar: userData.avatar }));
+        } else {
+          console.log("no user data found");
+
         }
-       
+
       } catch (error) {
         console.log("Error fetching user data:", error);
       }
@@ -47,91 +47,91 @@ function Home() {
     fetchUserData();
   }, []);
 
-  useEffect(()=>{
-    const fetchIdeas = async ()=>{
-        if(!userInfo) {
-            console.log("User info is not available yet.");
-            return ;
-        }
-        try{
-            const response = await axios.get("https://670941a3af1a3998baa0ec5c.mockapi.io/ideas")
-            const allideass = response.data
-            const StudentId =userInfo.StudentId
-console.log(allideass);
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      if (!userInfo) {
+        console.log("User info is not available yet.");
+        return;
+      }
+      try {
+        const response = await axios.get("https://670941a3af1a3998baa0ec5c.mockapi.io/ideas")
+        const allideass = response.data
+        const StudentId = userInfo.StudentId
+        console.log(allideass);
 
-            const StudentIdeas = allideass.filter(idea =>
-                idea.StudentId === StudentId)
-            console.log("Filtered ideas:", StudentIdeas); 
-            
-            const ideasWithUsernames = StudentIdeas.map(idea =>{
-                // const user = userInfo;
-                // console.log(user);
-                
-                return{
-                    ...idea,
-                    username:userInfo.name,
-                    avatar:userInfo.avatar,
-                    status:idea.status|| 'default'
-                    
-                    
-                }
-            })
-            console.log(ideasWithUsernames);
+        const StudentIdeas = allideass.filter(idea =>
+          idea.StudentId === StudentId)
+        console.log("Filtered ideas:", StudentIdeas);
 
-            setIdeas(ideasWithUsernames)
-        } catch(error){
-            console.error("Error fetching ideas:", error);
-        }
+        const ideasWithUsernames = StudentIdeas.map(idea => {
+          // const user = userInfo;
+          // console.log(user);
+
+          return {
+            ...idea,
+            username: userInfo.name,
+            avatar: userInfo.avatar,
+            status: idea.status || 'default'
+
+
+          }
+        })
+        console.log(ideasWithUsernames);
+
+        setIdeas(ideasWithUsernames)
+      } catch (error) {
+        console.error("Error fetching ideas:", error);
+      }
     }
     fetchIdeas();
-  },[userInfo])
+  }, [userInfo])
 
-  
+
   const addIdea = async () => {
     if (newIdea.title && newIdea.description) {
-        const userId = userInfo.id
+      const userId = userInfo.id
 
-        const ideatoAdd ={...newIdea,userId}
-        try{
-            const response = await axios.post("https://670941a3af1a3998baa0ec5c.mockapi.io/ideas",ideatoAdd)
-            setIdeas([...ideas,response.data]);
-      setFiltredArr([...filteredArr ,response.data]);
-      setNewIdea({
-        name: "",
-        description: "",
-        studentId: userData.StudentId,
-        avatar: newIdea.avatar,
-      });
-      setIsPopupOpen(false);
-        }catch (error) {
-            console.error("Error adding idea:", error);
-          }
-  
+      const ideatoAdd = { ...newIdea, userId }
+      try {
+        const response = await axios.post("https://670941a3af1a3998baa0ec5c.mockapi.io/ideas", ideatoAdd)
+        setIdeas([...ideas, response.data]);
+        setFiltredArr([...filteredArr, response.data]);
+        setNewIdea({
+          name: "",
+          description: "",
+          studentId: userData.StudentId,
+          avatar: newIdea.avatar,
+        });
+        setIsPopupOpen(false);
+      } catch (error) {
+        console.error("Error adding idea:", error);
+      }
+
     }
   };
   const updateIdea = async () => {
     if (editIdea.name && editIdea.description) {
-        try{
-            const response = await axios.put(`https://670941a3af1a3998baa0ec5c.mockapi.io/ideas/${editIdea.id}`,editIdea)
-            setIdeas(
-                ideas.map((idea) => (idea.id === editIdea.id ? response.data : idea))
-              );
-              setEditeIdea(null);
-            }catch (error) {
-                console.error("Error updating idea:", error);
-              }
-        }
-     
+      try {
+        const response = await axios.put(`https://670941a3af1a3998baa0ec5c.mockapi.io/ideas/${editIdea.id}`, editIdea)
+        setIdeas(
+          ideas.map((idea) => (idea.id === editIdea.id ? response.data : idea))
+        );
+        setEditeIdea(null);
+      } catch (error) {
+        console.error("Error updating idea:", error);
+      }
+    }
+
   };
-  const fitredIdeas = activeTap==="AllIdeas"
-  ?ideas.filter(idea => idea.status === "Acceptable")
-  :ideas.filter(idea =>idea.StudentId === userInfo.StudentId)
+  const fitredIdeas = activeTap === "AllIdeas"
+    ? ideas.filter(idea => idea.status === "Acceptable")
+    : ideas.filter(idea => idea.StudentId === userInfo.StudentId)
 
-  useEffect(()=>{
-      const results=searchForTerm(searchTerm,ideas);
-      setFiltredArr(results);
+  useEffect(() => {
+    const results = searchForTerm(searchTerm, ideas);
+    setFiltredArr(results);
 
-  },[searchTerm ,ideas])
+  }, [searchTerm, ideas])
   const displayedIdeas = searchTerm ? filteredArr : fitredIdeas;
 
   return (
@@ -148,9 +148,8 @@ console.log(allideass);
               <ul className="flex list-none ">
                 <li className="mr-4">
                   <button
-                    className={`py-2 px-4 ${
-                      activeTap === "myIdeas" ? "font-bold bg-slate-50" : ""
-                    }`}
+                    className={`py-2 px-4 ${activeTap === "myIdeas" ? "font-bold bg-slate-50" : ""
+                      }`}
                     onClick={() => setActiveTap("myIdeas")}
                   >
                     my ideas
@@ -158,9 +157,8 @@ console.log(allideass);
                 </li>
                 <li>
                   <button
-                    className={`py-2 px-4 ${
-                      activeTap === "AllIdeas" ? "font-bold bg-slate-50" : ""
-                    }`}
+                    className={`py-2 px-4 ${activeTap === "AllIdeas" ? "font-bold bg-slate-50" : ""
+                      }`}
                     onClick={() => setActiveTap("AllIdeas")}
                   >
                     All ideas
@@ -176,7 +174,7 @@ console.log(allideass);
               className={styles.Search}
             />
           </div>
-       
+
         </div>
       </div>
       <div className={`${styles.wrapper} flex justify-between`}>
@@ -198,29 +196,29 @@ console.log(allideass);
                   </h4>
                   <div>
 
-                  <label className="fint-bold text-xl">Title</label>
-                  <input
-                    type="text"
-                    placeholder="title idea"
-                    value={newIdea.title}
-                    onChange={(e) => {
-                      setNewIdea({ ...newIdea, title: e.target.value });
-                    }}
-                    className={`${styles.input} `}
-                  />
+                    <label className="fint-bold text-xl">Title</label>
+                    <input
+                      type="text"
+                      placeholder="title idea"
+                      value={newIdea.title}
+                      onChange={(e) => {
+                        setNewIdea({ ...newIdea, title: e.target.value });
+                      }}
+                      className={`${styles.input} `}
+                    />
                   </div>
                   <br />
                   <div>
-                  <label className="fint-bold text-xl">description</label>
+                    <label className="fint-bold text-xl">description</label>
 
-                  <textarea
-                    placeholder="descripation the idea"
-                    value={newIdea.description}
-                    onChange={(e) =>
-                      setNewIdea({ ...newIdea, description: e.target.value })
-                    }
-                    className={`${styles.input}`}
-                  />
+                    <textarea
+                      placeholder="descripation the idea"
+                      value={newIdea.description}
+                      onChange={(e) =>
+                        setNewIdea({ ...newIdea, description: e.target.value })
+                      }
+                      className={`${styles.input}`}
+                    />
                   </div>
                   <button
                     onClick={addIdea}
@@ -239,12 +237,12 @@ console.log(allideass);
       </div>
       <div className={`${styles.wrapper}`}>
         <div className="">
-        <button
-          className="btn text-white bg-primary p-2 rounded-full flex flex-wrap gap-2 items-center"
-          onClick={() => setIsPopupOpen(true)}
-        >
-           <span>New idea</span><IoAddCircleOutline className="w-7 h-7" />
-        </button>
+          <button
+            className="btn text-white bg-primary p-2 rounded-full flex flex-wrap gap-2 items-center"
+            onClick={() => setIsPopupOpen(true)}
+          >
+            <span>New idea</span><IoAddCircleOutline className="w-7 h-7" />
+          </button>
         </div>
         <div className="flex flex-wrap justify-around gap-1">
           {displayedIdeas.map((idea) => (
@@ -283,29 +281,29 @@ console.log(allideass);
                     Edit Idea
                   </h4>
                   <div>
-                  <label className="fint-bold text-xl">Title</label>
+                    <label className="fint-bold text-xl">Title</label>
 
-                  <input
-                    type="text"
-                    placeholder="عنواف الفكره "
-                    value={editIdea.name}
-                    onChange={(e) => {
-                      setEditeIdea({ ...editIdea, name: e.target.value });
-                    }}
-                    className={`${styles.input}`}
-                  />
+                    <input
+                      type="text"
+                      placeholder="عنواف الفكره "
+                      value={editIdea.name}
+                      onChange={(e) => {
+                        setEditeIdea({ ...editIdea, name: e.target.value });
+                      }}
+                      className={`${styles.input}`}
+                    />
                   </div>
                   <br />
                   <div>
-                  <label className="fint-bold text-xl">description</label>
-                  <textarea
-                    placeholder=",وصف الفكره"
-                    value={editIdea.description}
-                    onChange={(e) =>
-                      setEditeIdea({ ...editIdea, description: e.target.value })
-                    }
-                    className={`${styles.input}`}
-                  />
+                    <label className="fint-bold text-xl">description</label>
+                    <textarea
+                      placeholder=",وصف الفكره"
+                      value={editIdea.description}
+                      onChange={(e) =>
+                        setEditeIdea({ ...editIdea, description: e.target.value })
+                      }
+                      className={`${styles.input}`}
+                    />
                   </div>
                   <button
                     onClick={updateIdea}
