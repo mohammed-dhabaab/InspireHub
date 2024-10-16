@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
+import { PiStudentFill } from "react-icons/pi";
+import { FcIdea } from "react-icons/fc";
+import { IoPersonRemove } from "react-icons/io5"; 
 import styles from "../../styles";
 import searchForTerm from "../../utils/searchForTerm";
 import DeleteModel from "../../components/DeleteModel";
-
-
 
 function Admin() {
   const [students, setStudents] = useState([]);
@@ -18,18 +19,6 @@ function Admin() {
 
   const userApiUrl = import.meta.env.VITE_USERS_API;
   const ideasApiUrl = import.meta.env.VITE_IDEAS_API;
-
-
-
-  // useEffect(() => {
-  //   const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-  //   if (!storedUser) {
-  //     navigate("/");
-  //   } else if (storedUser.role === "student") {
-  //     navigate("/home");
-  //   }
-
-  // }, []);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -93,7 +82,6 @@ function Admin() {
     <main className={styles.outerWrapper}>
       <div className={styles.wrapper}>
         <div className="space-y-8 mb-12">
-
           <h3
             className={`${styles.heading3} text-center text-blue-900 font-extrabold text-4xl md:text-5xl lg:text-6xl tracking-wide`}
             style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}
@@ -124,18 +112,19 @@ function Admin() {
                 className="cursor-pointer flex items-center justify-between border-b-4 border-r-4 border-gray-300 rounded-lg px-6 py-4 bg-white hover:bg-blue-50 transition duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
                 <div className="flex items-center space-x-4">
-                  <img
-                    className="rounded-full w-12 h-12"
-                    src={student.avatar}
-                    alt={student.name}
-                  />
+                  <div className="rounded-full w-12 h-12 flex items-center justify-center bg-gray-100">
+                    <PiStudentFill className="text-blue-800 w-8 h-8" />
+                  </div>
                   <div>
                     <p className={`${styles.paragraph3} text-blue-800 font-semibold`}>
                       {student.name}
                     </p>
-                    <p className={`${styles.paragraph4} text-blue-600`}>
-                      Number of ideas: {student.ideas.length}
-                    </p>
+                    <div className="flex items-center">
+                      <FcIdea className="w-6 h-6 mr-2" />
+                      <span className={`${styles.paragraph4} text-blue-600`}>
+                        {student.ideas.length}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -146,7 +135,7 @@ function Admin() {
                   }}
                   className="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition duration-200"
                 >
-                  <span className="text-white font-bold">X</span>
+                  <IoPersonRemove className="text-white w-6 h-6" /> 
                 </button>
               </div>
             ))}
