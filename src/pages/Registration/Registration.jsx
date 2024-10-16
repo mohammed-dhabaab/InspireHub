@@ -48,7 +48,7 @@ function Registration() {
                     name: fullname,
                     email: email,
                     password: password,
-                    numberOfIdeas: [],
+                    numberOfIdeas: 0,
                     role: 'student',
                 });
 

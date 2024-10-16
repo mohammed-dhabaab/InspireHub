@@ -34,14 +34,18 @@ function Home() {
         const usersResponse = await axios.get(`${VITE_USERS_API}/${USER_ID}`);
         const data = usersResponse.data
         setUserInfo(data)
+       
 
       } catch (error) {
         console.log("Error fetching user data:", error);
       }
     };
     fetchUserData();
+ 
+    
+    
   }, []);
-
+ 
   useEffect(() => {
     const fetchCurrentUserIdeas = async () => {
       if (!userInfo) {
@@ -77,6 +81,11 @@ console.log(studentIdeas);
             status: idea.status || ""
           }
         })
+        console.log("##3#############");
+        
+console.log(studentIdeasWithUserInfo);
+console.log("########################");
+
 
         setAllStudentsIdeas(acceptedIdeasWithUserInfo)
         setIdeas(studentIdeasWithUserInfo)
@@ -91,10 +100,12 @@ console.log(studentIdeas);
   const addIdea = async () => {
     if (newIdea.name && newIdea.description) {
       const userId = userInfo.id
-
+      console.log(userInfo);
       const ideatoAdd = { ...newIdea, studentId: userId }
+
       try {
         const response = await axios.post(VITE_IDEAS_API, ideatoAdd)
+
         setIdeas([...ideas, response.data]);
         setFiltredArr([...filteredArr, response.data]);
         setNewIdea({
