@@ -43,7 +43,7 @@ function AdminRegistration() {
           name: fullname,
           email: email,
           password: password,
-          numberOfIdeas: [],
+          numberOfIdeas: 0,
           role: "admin",
         });
         clear();
