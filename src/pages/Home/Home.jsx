@@ -9,7 +9,7 @@ import ideaedit from "../../assets/Home/editidea.png";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-
+import {IoIosSearch} from "react-icons/io"
 
 function Home() {
   const [allStudentsIdeas, setAllStudentsIdeas] = useState([])
@@ -167,10 +167,8 @@ console.log("########################");
 
   }, [searchTerm, ideas])
   const displayedIdeas = searchTerm ? filteredArr : fitredIdeas;
-
-// 
-
-
+  
+ 
   return (
     <main className={`${styles.outerWrapper} `}>
       <div className={`${styles.wrapper} flex justify-center text-primary`}>
@@ -219,16 +217,16 @@ console.log("########################");
       </div>
       <div className={`${styles.wrapper} flex justify-between`}>
         {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
+          <div className="fixed inset-0 flex lg:items-center lg:justify-center md:justify-center sm:justify-center md:items-center sm:items-center max-sm:justify-center max-sm:items-center bg-black bg-opacity-50 z-50">
+            <div className="max-sm:w-3/4 max-sm:h-[50%] sm:h-[55%] md:h-[60%] max-md:h-[60%] lg:h-[70%] max-w-md sm:w-3/4 md:w-3/4 lg:w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
               <button
                 className={`absolute top-2 right-2 text-gray-500 hover:text-gray-800 ${styles.transition500}`}
                 onClick={() => setIsPopupOpen(false)}
               >
                 <IoIosClose className="w-10 h-10" />
               </button>
-              <div className="flex flex-wrap ">
-                <div className=" flex flex-col justify-around flex-wrap">
+              <div className="flex flex-wrap max-sm:w-full sm:w-full md:w-full lg:w-full md:justify-center">
+                <div className=" flex flex-col justify-around flex-wrap gap-3">
                   <h4
                     className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
                   >
@@ -270,7 +268,7 @@ console.log("########################");
                   </button>
                 </div>
                 <div className="w-96 h-96">
-                  <img src={ideasphoto} className="w-full h-full  scale-x-[-1] " />
+                  <img src={ideasphoto} className="lg:w-full lg:h-full md:w-full md:h-full scale-x-[-1] max-sm:w-full sm:w-full max-sm:h-[75%] sm:h-[80%]" />
                 </div>
               </div>
             </div>
@@ -309,16 +307,16 @@ console.log("########################");
           ))}
         </div>
         {editIdea && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
+          <div className="fixed inset-0 flex lg:items-center lg:justify-center md:justify-center sm:justify-center md:items-center sm:items-center max-sm:justify-center max-sm:items-center bg-black bg-opacity-50 z-50">
+            <div className="max-sm:w-3/4 max-sm:h-[50%] sm:h-[55%] md:h-[60%] max-md:h-[60%] lg:h-[60%] max-w-md sm:w-3/4 md:w-3/4 lg:w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary">
               <button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
                 onClick={() => setEditeIdea(null)}
               >
-                &times;
+                                <IoIosClose className="w-10 h-10" />
               </button>
               <div className="flex flex-wrap ">
-                <div className="flex flex-col justify-around flex-wrap">
+                <div className="flex flex-col justify-around flex-wrap gap-3">
                   <h4
                     className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
                   >
@@ -357,7 +355,7 @@ console.log("########################");
                   </button>
                 </div>
                 <div className="w-96 h-96">
-                  <img src={ideaedit} className="w-full h-full  scale-x-[-1]  " />
+                  <img src={ideaedit} className="lg:w-full lg:h-[90%] md:w-full md:h-full scale-x-[-1] max-sm:w-full sm:w-full max-sm:h-[75%] sm:h-[80%] " />
                 </div>
               </div>
             </div>
