@@ -103,8 +103,13 @@ console.log("########################");
       console.log(userInfo);
       const ideatoAdd = { ...newIdea, studentId: userId }
 
+
       try {
         const response = await axios.post(VITE_IDEAS_API, ideatoAdd)
+        const updatedUserData = { ...userInfo, numberOfIdeas: userInfo.numberOfIdeas + 1 }
+        const updateResponse = await axios.put(`${VITE_USERS_API}/${userId}`, updatedUserData)
+        console.log(updateResponse);
+        setUserInfo(updateResponse.data);
 
         setIdeas([...ideas, response.data]);
         setFiltredArr([...filteredArr, response.data]);
