@@ -17,7 +17,6 @@ function Registration() {
     const upperRegex = /[A-Z]/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
-    const apiUrl = import.meta.env.VITE_USERS_API;
     const VITE_REGISTER_API = import.meta.env.VITE_REGISTER_API;
     const VITE_IOGIN_API = import.meta.env.VITE_IOGIN_API;
 
