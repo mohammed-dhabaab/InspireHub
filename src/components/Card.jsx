@@ -1,31 +1,28 @@
 import styles from "../styles"
-import defaultUserPc from "../assets/register/defaultUserPc.png"
 import { FaUser } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import { useEffect } from "react";
+import { PiStudentFill } from "react-icons/pi";
 
-function Card({ idea, username, imgprofile, title, description, reason, onEdit, buttonText, status, isUserCard }) {
-  useEffect(() => {
-    console.log(idea)
-  })
+
+function Card({ username, title, description, reason, onEdit, buttonText, status, isUserCard }) {
+//   useEffect(() => {
+//     console.log(idea)
+//   })
   const statusStyles = {
     Acceptable: {
-      //   background: "bg-green-200",
       boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(187,247,133,0.5)]",
-      hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(144,211,214,0.5)]"
+      hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(187,247,133,0.5)]"
     },
     Rejected: {
-      //   background: "bg-red-50",
       boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(250,204,21,0.5)]",
-      hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(255,0,0,0.5)]"
+      hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(250,204,21,0.5)]"
     },
     Edited: {
-      //   background: "bg-blue-200",
       boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(125,211,252,0.5)]",
-      hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(255,255,0,0.5)]"
+      hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(125,211,252,0.5)]"
     },
     default: {
-      //   background: "bg-gray-50",
       boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(240,240,240,0.5)]",
       hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(0,0,0,0.5)]"
     },
@@ -45,8 +42,9 @@ function Card({ idea, username, imgprofile, title, description, reason, onEdit, 
         </figure >
         <div className="absolute text-neutral-800 bottom-4 left-0 px-4 flex flex-col w-full h-full">
           <figure className="flex flex-wrap justify-between">
-            <div className={`text-neutral-800 px-4 ${isUserCard ? 'pt-4':'pt-8'} flex items-center `}>
-              <img className="w-10 h-10 rounded-full" src={`${defaultUserPc}`} alt="Rounded avatar" />
+            <div className=" text-neutral-800 px-4 pt-4 flex items-center gap-2">
+              <PiStudentFill className='w-[28px] h-[28px] sm:w-[30px] sm:h-[30px] md:w-[34px] md:h-[34px]' />
+
               <p className={`${styles.paragraph4}`}>{username}</p>
             </div>
             {isUserCard ?
