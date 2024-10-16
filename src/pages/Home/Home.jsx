@@ -57,7 +57,7 @@ function Home() {
             const response = await axios.get("https://670941a3af1a3998baa0ec5c.mockapi.io/ideas")
             const allideass = response.data
             const StudentId =userInfo.StudentId
-console.log(allideass);
+            console.log(allideass);
 
             const StudentIdeas = allideass.filter(idea =>
                 idea.StudentId === StudentId)

@@ -6,15 +6,30 @@ import styles from "../../styles";
 import searchForTerm from "../../utils/searchForTerm";
 import DeleteModel from "./DeleteModel"; 
 
+
+
 function Admin() {
   const [students, setStudents] = useState([]); 
   const [searchInput, setSearchInput] = useState(""); 
   const [isDialogOpen, setIsDialogOpen] = useState(false); 
   const [studentIdToRemove, setStudentIdToRemove] = useState(null); 
   const navigate = useNavigate();
+  const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
   const userApiUrl = import.meta.env.VITE_USERS_API;
   const ideasApiUrl = import.meta.env.VITE_IDEAS_API;
+
+   
+    
+    useEffect(() => {
+      const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+      if (!storedUser) {
+        navigate("/");
+      } else if (storedUser.role === "student") {
+        navigate("/home");
+      }
+      
+    }, []);
 
   useEffect(() => {
     const fetchStudents = async () => {
