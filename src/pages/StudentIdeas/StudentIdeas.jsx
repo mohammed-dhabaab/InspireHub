@@ -21,22 +21,22 @@ function StudentIdeas() {
     const [reasonMessage, setReasonMessage] = useState("");
     const [ideaStatus, setIdeaStatus] = useState("");
     const [showCardSpinner, setShowCardSpinner] = useState({});
-    const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
 
     const [editStatus, setEditStatus] = useState({});
     const [nameInput, setNameInput] = useState({});
     const [descriptionInput, setDescriptionInput] = useState({});
+    const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
-    // useEffect(() => {
-    //     const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE)).user;
-    //     if (!storedUser) {
-    //         navigate("/");
-    //     } else if (storedUser.role === "student") {
-    //         navigate("/home");
-    //     }
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
 
-    // }, []);
+        if (!storedUser || !storedUser.user) {
+            navigate("/");
+        } else if (storedUser.user.role !== "admin") {
+            navigate("/home");
+        }
+    }, []);
 
 
     const getStudentIdeas = async () => {
