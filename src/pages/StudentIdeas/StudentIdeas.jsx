@@ -21,7 +21,7 @@ function StudentIdeas() {
     const [reasonMessage, setReasonMessage] = useState("");
     const [ideaStatus, setIdeaStatus] = useState("");
     const [showCardSpinner, setShowCardSpinner] = useState({});
-    const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
+    // const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
 
     const [editStatus, setEditStatus] = useState({});
