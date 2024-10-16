@@ -33,30 +33,29 @@ function AdminRegistration() {
       return;
     }
     setErrorMessage("");
-
     try {
-      const response = await axios.get(apiUrl);
-      const users = response.data;
-      const userExists = users.some((ele) => ele.email === email);
+      const response = await axios.post(VITE_REGISTER_API, {
+                  name: fullname,
+                  email: email,
+                  password: password,
+                  numberOfIdeas: 0,
+                  role: "admin",
+              });
+       if(response.status === 201){
+          clear();
+          setSuccessMessage(
+            `${newUserResponse.data.name} have been registerd as a new admin`
+          );
 
-      if (!userExists) {
-        const newUserResponse = await axios.post(apiUrl, {
-          name: fullname,
-          email: email,
-          password: password,
-          numberOfIdeas: 0,
-          role: "admin",
-        });
-        clear();
-        setSuccessMessage(
-          `${newUserResponse.data.name} have been registerd as a new admin`
-        );
-      } else {
-        setErrorMessage("The email is already being used");
       }
-    } catch (error) {
-      setErrorMessage("Something went wrong, please try again later");
-    }
+  } catch (error) {
+      if (error.response && error.response.status === 400) {
+          setErrorMessage('The email is already being used');
+      } else {
+          setErrorMessage("Something went wrong, please try again later");
+      }
+      console.error(error);
+  }
   };
 
   useEffect(() => {

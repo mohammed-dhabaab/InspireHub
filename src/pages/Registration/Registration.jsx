@@ -47,10 +47,7 @@ function Registration() {
                         numberOfIdeas: 0,
                         role: 'student',
                     });
-                    console.log(response);
-            if(response.status === 400){
-                setErrorMessage('The email is already being used');
-            }else if(response.status === 201){
+             if(response.status === 201){
                 const responselogin = await axios.post(VITE_IOGIN_API, {
                     email: email,
                     password: password,
@@ -62,8 +59,12 @@ function Registration() {
 
             }
         } catch (error) {
-            setErrorMessage('Something went wrong, please try again later');
-            console.log(error);
+            if (error.response && error.response.status === 400) {
+                setErrorMessage('The email is already being used');
+            } else {
+                setErrorMessage("Something went wrong, please try again later");
+            }
+            console.error(error);
         }
     };
 
@@ -76,12 +77,9 @@ function Registration() {
                 email: email,
                 password: password,
             });
-            console.log(response);
-            if(response.status === 400){
-                setErrorMessage("Invalid email or password");
-            }else if(response.status === 200){
+            if (response.status === 200) {
                 localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(response.data));
-
+    
                 if (response.data.user.role === 'admin') {
                     navigate("/admin");
                 } else {
@@ -89,7 +87,11 @@ function Registration() {
                 }
             }
         } catch (error) {
-            setErrorMessage("Something went wrong, please try again later");
+            if (error.response && error.response.status === 400) {
+                setErrorMessage("Invalid email or password");
+            } else {
+                setErrorMessage("Something went wrong, please try again later");
+            }
             console.error(error);
         }
     };
