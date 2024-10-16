@@ -10,23 +10,23 @@ function Card({ idea, username, imgprofile, title, description, reason, onEdit, 
   })
   const statusStyles = {
     Acceptable: {
-      //   background: "bg-green-50",
-      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(144,211,214,0.5)]",
+      //   background: "bg-green-200",
+      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(187,247,133,0.5)]",
       hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(144,211,214,0.5)]"
     },
     Rejected: {
       //   background: "bg-red-50",
-      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(255,0,0,0.5)]",
+      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(250,204,21,0.5)]",
       hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(255,0,0,0.5)]"
     },
     Edited: {
-      //   background: "bg-yellow-50",
-      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(255,255,0,0.5)]",
+      //   background: "bg-blue-200",
+      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(125,211,252,0.5)]",
       hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(255,255,0,0.5)]"
     },
     default: {
       //   background: "bg-gray-50",
-      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(0,0,0,0.5)]",
+      boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(240,240,240,0.5)]",
       hoverBoxShadow: "hover:[box-shadow:4px_4px_0px_0px_rgba(0,0,0,0.5)]"
     },
   };
