@@ -18,10 +18,11 @@ function Registration() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
     const apiUrl = import.meta.env.VITE_USERS_API;
+    const VITE_REGISTER_API = import.meta.env.VITE_REGISTER_API;
+    const VITE_IOGIN_API = import.meta.env.VITE_IOGIN_API;
 
 
-
-    const handleSignin = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
 
         if (fullname.length <= 3) {
@@ -39,33 +40,30 @@ function Registration() {
         setErrorMessage('');
 
         try {
-            const response = await axios.get(apiUrl);
-            const users = response.data;
-            const userExists = users.some(ele => ele.email === email);
-
-            if (!userExists) {
-                const newUserResponse = await axios.post(apiUrl, {
-                    name: fullname,
+            const response = await axios.post(VITE_REGISTER_API, {
+                        name: fullname,
+                        email: email,
+                        password: password,
+                        numberOfIdeas: 0,
+                        role: 'student',
+                    });
+                    console.log(response);
+            if(response.status === 400){
+                setErrorMessage('The email is already being used');
+            }else if(response.status === 201){
+                const responselogin = await axios.post(VITE_IOGIN_API, {
                     email: email,
                     password: password,
-                    numberOfIdeas: 0,
-                    role: 'student',
                 });
+                console.log(responselogin);
+               localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(responselogin.data));
+    
+               navigate("/home");
 
-                const user = {
-                    id: newUserResponse.data.id,
-                    name: newUserResponse.data.name,
-                    email: newUserResponse.data.email,
-                    numberOfIdeas: newUserResponse.data.numberOfIdeas,
-                    role: newUserResponse.data.role,
-                };
-                localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(user));
-                navigate("/home");
-            } else {
-                setErrorMessage('The email is already being used');
             }
         } catch (error) {
             setErrorMessage('Something went wrong, please try again later');
+            console.log(error);
         }
     };
 
@@ -74,34 +72,25 @@ function Registration() {
         setErrorMessage('');
 
         try {
-            const response = await axios.get(apiUrl);
-            const userData = response.data;
+            const response = await axios.post(VITE_IOGIN_API, {
+                email: email,
+                password: password,
+            });
+            console.log(response);
+            if(response.status === 400){
+                setErrorMessage("Invalid email or password");
+            }else if(response.status === 200){
+                localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(response.data));
 
-            const userExist = userData.filter(
-                (ele) => ele.email === email && ele.password === password
-            );
-
-            if (userExist.length === 1) {
-                const user = {
-                    id: userExist[0].id,
-                    name: userExist[0].name,
-                    email: email,
-                    numberOfIdeas: userExist[0].numberOfIdeas,
-                    role: userExist[0].role,
-                };
-                localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(user));
-
-                if (userExist[0].role === 'admin') {
+                if (response.data.user.role === 'admin') {
                     navigate("/admin");
                 } else {
                     navigate("/home");
                 }
-
-            } else {
-                setErrorMessage("Invalid email or password");
             }
         } catch (error) {
             setErrorMessage("Something went wrong, please try again later");
+            console.error(error);
         }
     };
 
@@ -157,7 +146,7 @@ function Registration() {
             max-sm:w-full max-sm:items-start max-sm:h-[40%]">
                         <div className=' w-[80%] h-[50%] flex flex-col justify-center items-center gap-1'>
                             <div className={`${styles.heading5}`}>Join us</div>
-                            <button onClick={() => { setIsFormActive(true); toggleFormSignin(); }} className={`${styles.primaryButton} w-[80%] rounded-xl hover:text-secondary-light-color`}>Sign In</button>
+                            <button onClick={() => { setIsFormActive(true); toggleFormSignin(); }} className={`${styles.primaryButton} w-[80%] rounded-xl hover:text-secondary-light-color`}>Sign up</button>
                             <div className="flex items-center w-[80%]">
                                 <hr className="flex-grow border-t border-gray-300" />
                                 <span className="mx-2 text-gray-500">or</span>
@@ -176,8 +165,8 @@ function Registration() {
                     </div>
                     <div className='flex flex-col justify-start items-center w-full h-[90%]'>
                         <form className={`${isSigninActive ? "" : "hidden"} w-[70%] p-4 max-md:w-[80%]`}
-                            onSubmit={handleSignin}>
-                            <h1 className={`${styles.heading4} text-primary text-center mb-4`}>Sign In</h1>
+                            onSubmit={handleSignup}>
+                            <h1 className={`${styles.heading4} text-primary text-center mb-4`}>Sign Up</h1>
                             <div>
                                 <label htmlFor="fullname" className='inputLabel' >Full Name</label>
                                 <input className="w-full text-black py-2 px-3 border rounded-xl focus:outline-slate-200"
@@ -221,7 +210,7 @@ function Registration() {
                                 <button className="w-full rounded-md bg-[#4e3497] hover:bg-secondary-light-color hover:text-[#4e3497] text-white font-bold py-2 px-4 focus:outline-none "
                                     type="submit"
                                 >
-                                    Sign in
+                                    Sign up
                                 </button>
                             </div>
                         </form>
