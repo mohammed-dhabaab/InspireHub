@@ -14,7 +14,7 @@ function AdminRegistration() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
   const VITE_REGISTER_API = import.meta.env.VITE_REGISTER_API;
-  
+
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -35,28 +35,28 @@ function AdminRegistration() {
     setErrorMessage("");
     try {
       const response = await axios.post(VITE_REGISTER_API, {
-                  name: fullname,
-                  email: email,
-                  password: password,
-                  numberOfIdeas: 0,
-                  role: "admin",
-              });
-              console.log(response)
-       if(response.status === 201){
-          clear();
-          setSuccessMessage(
-            `${fullname} have been registerd as a new admin`
-          );
+        name: fullname,
+        email: email,
+        password: password,
+        numberOfIdeas: 0,
+        role: "admin",
+      });
+      console.log(response)
+      if (response.status === 201) {
+        clear();
+        setSuccessMessage(
+          `${fullname} have been registerd as a new admin`
+        );
 
       }
-  } catch (error) {
+    } catch (error) {
       if (error.response && error.response.status === 400) {
-          setErrorMessage('The email is already being used');
+        setErrorMessage('The email is already being used');
       } else {
-          setErrorMessage("Something went wrong, please try again later");
+        setErrorMessage("Something went wrong, please try again later");
       }
       console.error(error);
-  }
+    }
   };
 
   useEffect(() => {
@@ -70,15 +70,15 @@ function AdminRegistration() {
     setErrorMessage("");
   };
 
-    useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
 
-        if (!storedUser || !storedUser.user) {
-            navigate("/");
-        } else if (storedUser.user.role !== "admin") {
-            navigate("/home");
-        }
-    }, []);
+    if (!storedUser || !storedUser.user) {
+      navigate("/");
+    } else if (storedUser.user.role !== "admin") {
+      navigate("/home");
+    }
+  }, []);
 
   return (
     <div>
@@ -87,15 +87,15 @@ function AdminRegistration() {
           className={`w-[37%] h-[78%] bg-[#eeecec] rounded-lg py-4 flex flex-col justify-center items-center 
          max-md:w-[85%] max-md:h-[72%] `}
         >
-          <div className="flex flex-col justify-start items-center w-full h-[90%]">
+          <div className="flex flex-col justify-start items-center w-full ">
             <form
-              className={`w-[70%] p-4 max-md:w-[80%]`}
+              className={`flex flex-col justify-center w-[70%] p-4 max-md:w-[80%]`}
               onSubmit={handleSignup}
             >
               <h1
-                className={`${styles.heading4} text-primary text-center mb-4`}
+                className={`${styles.heading3} text-primary text-center mb-4`}
               >
-                Add an Admin
+                Add Admin
               </h1>
               {successMessage && (
                 <div className="text-green-500 mb-2">{successMessage}</div>
@@ -114,7 +114,7 @@ function AdminRegistration() {
                   required
                 />
               </div>
-              <div>
+              <div className="my-2 ">
                 <label htmlFor="email" className="inputLabel">
                   Email
                 </label>
@@ -130,7 +130,7 @@ function AdminRegistration() {
               </div>
               <div>
                 <label htmlFor="password" className="inputLabel">
-                  password
+                  Password
                 </label>
                 <input
                   className="w-full text-black py-2 px-3 border rounded-xl focus:outline-slate-200"
@@ -148,7 +148,7 @@ function AdminRegistration() {
               )}
               <div className="flex justify-center items-center">
                 <button
-                  className="w-full rounded-md bg-[#4e3497] hover:bg-secondary-light-color hover:text-[#4e3497] text-white font-bold py-2 px-4 focus:outline-none "
+                  className={`${styles.transition500} w-full rounded-full border-2 border-solid border-primary text-primary hover:bg-primary hover:text-white  font-bold py-2 px-4 focus:outline-none`}
                   type="submit"
                 >
                   Add

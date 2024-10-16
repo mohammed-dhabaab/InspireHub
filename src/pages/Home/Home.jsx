@@ -42,9 +42,11 @@ function Home() {
       navigate("/admin");
     }
 
-  }, [navigate]);
+  }, []);
 
   USER_ID = JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).user.id;
+  const USER_Token = JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).token;
+
   //   USER_ID = "670ff9873abe01fbd2812066";
 
   useEffect(() => {
@@ -66,7 +68,13 @@ function Home() {
         return;
       }
       try {
-        const ideasResponse = await axios.get(VITE_IDEAS_API);
+        const ideasResponse = await axios.get(VITE_IDEAS_API, { headers: { Authorization: `Bearer ${USER_Token}` } });
+
+        // if( ideasResponse.status === 403 || ideasResponse.status === 401){
+        //  localStorage.removeItem(USER_LOCAL_STORGE);
+        // console.log('herree')
+        // navigate("/");
+        // }
         const allIdeas = ideasResponse.data;
         const usersResponse = await axios.get(VITE_USERS_API);
         const allUsers = usersResponse.data;
@@ -105,6 +113,9 @@ function Home() {
         setAllStudentsIdeas(acceptedIdeasWithUserInfo);
         setIdeas(studentIdeasWithUserInfo);
       } catch (error) {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          navigate("/");
+        }
         console.error("Error fetching ideas:", error);
       }
     };

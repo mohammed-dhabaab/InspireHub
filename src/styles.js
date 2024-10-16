@@ -20,7 +20,7 @@ const styles = {
     Search: "w-full max-w-[210px] px-4 py-2 border border-solid border-gray-300 rounded-lg text-black focus:outline-none  mx-auto",
 
 
-    input: "w-full py-1 px-2 outline outline-solid outline-gray-200 focus:outline focus:outline-solid focus:outline-gray-200 rounded-md",
+    input: "w-full py-1 px-2 outline outline-solid outline-gray-200 focus:outline focus:outline-solid focus:outline-gray-200 rounded-sm",
 
     primaryButton: `py-3 px-6 text-[14px] font-bold tracking-widest text-primary hover:bg-primary hover:text-light-primary border border-solid border-primary ${mainTransition}`,
     secondaryButton: `py-[10px] px-8 text-xs font-semibold text-light-primary border border-solid border-light-primary hover:bg-light-primary hover:text-dark ${mainTransition}`,

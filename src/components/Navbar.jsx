@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react"; 
-import { useLocation } from "react-router-dom"; 
-import { Link } from "react-router-dom"; 
-import styles from "../styles"; 
-import Logo from "../assets/logo/logo-light.png"; 
-import { IoLogOut } from "react-icons/io5"; 
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import styles from "../styles";
+import Logo from "../assets/logo/logo-light.png";
+import { IoLogOut } from "react-icons/io5";
 
 function Navbar() {
-  const location = useLocation(); 
-  const [activeLink, setActiveLink] = useState(null); 
+  const location = useLocation();
+  const [activeLink, setActiveLink] = useState(null);
 
   useEffect(() => {
     if (location.pathname === "/admin") {
@@ -31,19 +31,17 @@ function Navbar() {
             <>
               <Link to={"/admin"}>
                 <p
-                  className={`hover:text-[#53e3d7] cursor-pointer transition duration-500 ${
-                    activeLink === "students" ? "border-b-2 border-[#53e3d7]" : ""
-                  }`}
+                  className={`hover:text-[#53e3d7] cursor-pointer transition duration-500 ${activeLink === "students" ? "border-b-2 border-[#53e3d7] text-[#53e3d7]" : ""
+                    }`}
                   onClick={() => setActiveLink("students")}
                 >
-                  Students
+                  Home
                 </p>
               </Link>
               <Link to={"/addAdmin"}>
                 <p
-                  className={`hover:text-[#53e3d7] cursor-pointer transition duration-500 ${
-                    activeLink === "addAdmin" ? "border-b-2 border-[#53e3d7]" : ""
-                  }`}
+                  className={`hover:text-[#53e3d7] cursor-pointer transition duration-500 ${activeLink === "addAdmin" ? "text-[#53e3d7] border-b-2 border-[#53e3d7]" : ""
+                    }`}
                   onClick={() => setActiveLink("addAdmin")}
                 >
                   Add Admin
