@@ -176,11 +176,11 @@ console.log("########################");
       </div>
 
       <div className={`${styles.wrapper} flex justify-center`}>
-        <div className="text-center">
+        <div className="text-center ">
           <h3 className={`${styles.heading3} mb-4`}>Ideas</h3>
-          <div className="w-full">
-            <div className="relative right-0">
-              <ul className="flex list-none ">
+          <div className="w-full ">
+            <div className="relative right-0 ">
+              <ul className="flex list-none justify-center">
                 <li className="mr-4">
                   <button
                     className={`py-2 px-4 ${activeTap === "myIdeas" ? "font-bold bg-slate-50" : ""
@@ -215,23 +215,25 @@ console.log("########################");
 
         </div>
       </div>
-      <div className={`${styles.wrapper} flex justify-between`}>
+      <div className={`${styles.wrapper} flex justify-between `}>
         {isPopupOpen && (
           <div className="fixed inset-0 flex lg:items-center lg:justify-center md:justify-center sm:justify-center md:items-center sm:items-center max-sm:justify-center max-sm:items-center bg-black bg-opacity-50 z-50">
-            <div className="max-sm:w-3/4 max-sm:h-[50%] sm:h-[55%] md:h-[60%] max-md:h-[60%] lg:h-[70%] max-w-md sm:w-3/4 md:w-3/4 lg:w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
+            <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
               <button
-                className={`absolute top-2 right-2 text-gray-500 hover:text-gray-800 ${styles.transition500}`}
+                className={`absolute top-1 right-1 text-gray-500 hover:text-gray-800 ${styles.transition500}`}
                 onClick={() => setIsPopupOpen(false)}
               >
                 <IoIosClose className="w-10 h-10" />
               </button>
-              <div className="flex flex-wrap max-sm:w-full sm:w-full md:w-full lg:w-full md:justify-center">
-                <div className=" flex flex-col justify-around flex-wrap gap-3">
-                  <h4
+              <h4
                     className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
                   >
                     Add New Idea
                   </h4>
+              <div className="flex flex-col lg:flex-row lg:items-center md:items-center sm:items-center max-sm:items-center">
+                
+                <div className=" flex flex-col  flex-wrap w-full lg:w-2/3 md:w-2/3 sm:w-2/3 max-sm:w-2/3 ">
+                
                   <div>
 
                     <label className="fint-bold text-xl">Title</label>
@@ -267,8 +269,8 @@ console.log("########################");
                     Add New Idea
                   </button>
                 </div>
-                <div className="w-96 h-96">
-                  <img src={ideasphoto} className="lg:w-full lg:h-full md:w-full md:h-full scale-x-[-1] max-sm:w-full sm:w-full max-sm:h-[75%] sm:h-[80%]" />
+                <div className="w-96 max-w-xs md:max-w-md lg:max-w-lg h-auto">
+                  <img src={ideasphoto} className="w-full h-auto object-cover" />
                 </div>
               </div>
             </div>
@@ -284,10 +286,10 @@ console.log("########################");
             <span>New idea</span><IoAddCircleOutline className="w-7 h-7" />
           </button>
         </div>
-        <div className="flex flex-wrap justify-around gap-1 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 max-sm:grid-cols-1 lg:grid-cols-3 lg:gap-7 max-sm:justify-items-center md:justify-items-center">
           {displayedIdeas.slice().reverse().map((idea) => (
             <div
-              className="flex-shrink-0 w-full max-sm:w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 "
+              className=""
               key={idea.id}
             >
               <Card
@@ -308,20 +310,21 @@ console.log("########################");
         </div>
         {editIdea && (
           <div className="fixed inset-0 flex lg:items-center lg:justify-center md:justify-center sm:justify-center md:items-center sm:items-center max-sm:justify-center max-sm:items-center bg-black bg-opacity-50 z-50">
-            <div className="max-sm:w-3/4 max-sm:h-[50%] sm:h-[55%] md:h-[60%] max-md:h-[60%] lg:h-[60%] max-w-md sm:w-3/4 md:w-3/4 lg:w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary">
+            <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary">
               <button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
                 onClick={() => setEditeIdea(null)}
               >
                                 <IoIosClose className="w-10 h-10" />
               </button>
-              <div className="flex flex-wrap ">
-                <div className="flex flex-col justify-around flex-wrap gap-3">
-                  <h4
+              <h4
                     className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
                   >
                     Edit Idea
                   </h4>
+              <div className="flex flex-col lg:flex-row lg:items-center md:items-center sm:items-center max-sm:items-center">
+                <div className="flex flex-col  flex-wrap w-full lg:w-2/3 md:w-2/3 sm:w-2/3 max-sm:w-2/3 ">
+              
                   <div>
                     <label className="fint-bold text-xl">Title</label>
 
@@ -356,8 +359,8 @@ console.log("########################");
                     update Idea
                   </button>
                 </div>
-                <div className="w-96 h-96">
-                  <img src={ideaedit} className="lg:w-full lg:h-[90%] md:w-full md:h-full scale-x-[-1] max-sm:w-full sm:w-full max-sm:h-[75%] sm:h-[80%] " />
+                <div className="w-96 max-w-xs md:max-w-md lg:max-w-lg h-auto">
+                  <img src={ideaedit} className="w-full h-auto object-cover " />
                 </div>
               </div>
             </div>
