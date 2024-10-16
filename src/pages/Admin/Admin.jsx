@@ -21,11 +21,27 @@ function Admin() {
   const ideasApiUrl = import.meta.env.VITE_IDEAS_API;
 
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+
+    if (!storedUser || !storedUser.user) {
+        navigate("/");
+    } else if (storedUser.user.role !== "admin") {
+        navigate("/home");
+    }
+}, []);
+
+  const USER_Token =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).token;
+
+
+  useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(userApiUrl);
+        const response = await axios.get(userApiUrl,{headers:{Authorization: `Bearer ${USER_Token}`}});
         setStudents(response.data);
       } catch (error) {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          navigate("/");
+      }
         console.error("Error fetching students:", error);
       }
     };
@@ -34,20 +50,23 @@ function Admin() {
 
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`${userApiUrl}/${id}`);
+      await axios.delete(`${userApiUrl}/${id}`,{headers:{Authorization: `Bearer ${USER_Token}`}});
 
-      const ideasResponse = await axios.get(ideasApiUrl);
+      const ideasResponse = await axios.get(ideasApiUrl,{headers:{Authorization: `Bearer ${USER_Token}`}});
       const ideas = ideasResponse.data;
       const studentIdeas = ideas.filter((idea) => idea.studentId === id);
       await Promise.all(
         studentIdeas.map(async (idea) => {
-          await axios.delete(`${ideasApiUrl}/${idea.id}`);
+          await axios.delete(`${ideasApiUrl}/${idea.id}`,{headers:{Authorization: `Bearer ${USER_Token}`}});
         })
       );
 
       setStudents((prevStudents) => prevStudents.filter((student) => student.id !== id));
       console.log("Student and related ideas removed successfully");
     } catch (error) {
+      if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        navigate("/");
+    }
       console.error("Error removing student and ideas:", error);
     }
   };

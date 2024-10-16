@@ -28,34 +28,42 @@ function StudentIdeas() {
     const [nameInput, setNameInput] = useState({});
     const [descriptionInput, setDescriptionInput] = useState({});
 
-    // useEffect(() => {
-    //     const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE)).user;
-    //     if (!storedUser) {
-    //         navigate("/");
-    //     } else if (storedUser.role === "student") {
-    //         navigate("/home");
-    //     }
-
-    // }, []);
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+    
+        if (!storedUser || !storedUser.user) {
+            navigate("/");
+        } else if (storedUser.user.role !== "admin") {
+            navigate("/home");
+        }
+    }, []);
+    
+      const USER_Token =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).token;
 
 
     const getStudentIdeas = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_IDEAS_API}`);
+            const response = await axios.get(`${import.meta.env.VITE_IDEAS_API}`,{headers:{Authorization: `Bearer ${USER_Token}`}});
             const targetedStudentIdeas = response.data.filter(idea => idea.studentId === studentId);
             setStudentIdeas(targetedStudentIdeas);
             setFilteredStudentIdeas(targetedStudentIdeas);
         } catch (error) {
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                navigate("/");
+            }
             console.error(error);
         }
     };
 
     const getStudent = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_USERS_API}/${studentId}`)
+            const response = await axios.get(`${import.meta.env.VITE_USERS_API}/${studentId}`,{headers:{Authorization: `Bearer ${USER_Token}`}})
             const data = response.data
             setStudent(data)
         } catch (error) {
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                navigate("/");
+            }
             console.log(error)
         }
     }
@@ -68,17 +76,20 @@ function StudentIdeas() {
     const deleteStudent = async () => {
         try {
             await Promise.all(studentIdeas.map(async (idea) => {
-                const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${idea._id}`);
+                const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${idea._id}`,{headers:{Authorization: `Bearer ${USER_Token}`}});
                 if (response.status !== 200) {
                     throw new Error(`Failed to delete idea with ID ${idea._id}`);
                 }
             }));
 
-            const response = await axios.delete(`${import.meta.env.VITE_USERS_API}/${studentId}`);
+            const response = await axios.delete(`${import.meta.env.VITE_USERS_API}/${studentId}`,{headers:{Authorization: `Bearer ${USER_Token}`}});
             if (response.status === 200) {
                 navigate("/admin");
             }
         } catch (error) {
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                navigate("/");
+            }
             console.error('Error deleting student and/or associated ideas:', error);
         }
     };
@@ -114,10 +125,13 @@ function StudentIdeas() {
 
                 setStudentIdeas(newStudentIdeas);
                 setFilteredStudentIdeas(newStudentIdeas);
-                await axios.put(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`, updatedIdea);
+                await axios.put(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`, updatedIdea,{headers:{Authorization: `Bearer ${USER_Token}`}});
                 toggleReasonInput(ideaId);
             }
         } catch (error) {
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                navigate("/");
+            }
             console.error(error);
         } finally {
             setShowCardSpinner(prevState => ({ ...prevState, [ideaId]: false }));
@@ -146,11 +160,14 @@ function StudentIdeas() {
 
                 setStudentIdeas(newStudentIdeas);
                 setFilteredStudentIdeas(newStudentIdeas);
-                await axios.put(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`, updatedIdea);
+                await axios.put(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`, updatedIdea,{headers:{Authorization: `Bearer ${USER_Token}`}});
 
                 setEditStatus(prevState => ({ ...prevState, [ideaId]: false }));
             }
         } catch (error) {
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                navigate("/");
+            }
             console.error('Error updating idea:', error);
         } finally {
             setShowCardSpinner(prevState => ({ ...prevState, [ideaId]: false }));
@@ -167,12 +184,15 @@ function StudentIdeas() {
     const deleteIdea = async (ideaId) => {
         try {
             setShowCardSpinner(prevState => ({ ...prevState, [ideaId]: true }));
-            const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`);
+            const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`,{headers:{Authorization: `Bearer ${USER_Token}`}});
             if (response.status === 200) {
                 setStudentIdeas(prevIdeas => prevIdeas.filter(idea => idea._id !== ideaId));
                 setFilteredStudentIdeas(prevIdeas => prevIdeas.filter(idea => idea._id !== ideaId));
             }
         } catch (error) {
+            if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                navigate("/");
+            }
             console.error(error);
         } finally {
             setShowCardSpinner(prevState => ({ ...prevState, [ideaId]: false }));

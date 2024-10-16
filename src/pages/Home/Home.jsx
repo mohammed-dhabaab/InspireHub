@@ -35,7 +35,7 @@ function Home() {
 
     useEffect(() => {
       const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-      if (!storedUser) {
+      if (!storedUser || !storedUser.user) {
         navigate("/");
       } else if (storedUser.role === "admin") {
         navigate("/admin");
@@ -51,10 +51,13 @@ function Home() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const usersResponse = await axios.get(`${VITE_USERS_API}/${USER_ID}`);
+        const usersResponse = await axios.get(`${VITE_USERS_API}/${USER_ID}`,{headers:{Authorization: `Bearer ${USER_Token}`}});
         const data = usersResponse.data;
         setUserInfo(data);
       } catch (error) {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          navigate("/");
+      }
         console.log("Error fetching user data:", error);
       }
     };
@@ -69,13 +72,8 @@ function Home() {
       try {
         const ideasResponse = await axios.get(VITE_IDEAS_API,{headers:{Authorization: `Bearer ${USER_Token}`}});
       
-        // if( ideasResponse.status === 403 || ideasResponse.status === 401){
-          //  localStorage.removeItem(USER_LOCAL_STORGE);
-          // console.log('herree')
-            // navigate("/");
-        // }
         const allIdeas = ideasResponse.data;
-        const usersResponse = await axios.get(VITE_USERS_API);
+        const usersResponse = await axios.get(VITE_USERS_API,{headers:{Authorization: `Bearer ${USER_Token}`}});
         const allUsers = usersResponse.data;
 
         const allAcceptedIdeas = allIdeas.filter(
@@ -131,13 +129,13 @@ function Home() {
 console.log(ideatoAdd);
 
       try {
-        const response = await axios.post(VITE_IDEAS_API, ideatoAdd);
+        const response = await axios.post(VITE_IDEAS_API, ideatoAdd,{headers:{Authorization: `Bearer ${USER_Token}`}});
         const updatedUserData = {
           ...userInfo,
           numberOfIdeas: parseInt(userInfo.numberOfIdeas ) + 1 ,
         };
-        const updateResponse = await axios.put( `${VITE_USERS_API}/${userId}`,  updatedUserData );
-        setUserInfo(updateResponse.data);
+        // const updateResponse = await axios.put( `${VITE_USERS_API}/${userId}`,  updatedUserData );
+        // setUserInfo(updateResponse.data);
 
         setIdeas([...ideas, response.data]);
         setFiltredArr([...filteredArr, response.data]);
@@ -151,6 +149,9 @@ console.log(ideatoAdd);
 
         setIsPopupOpen(false);
       } catch (error) {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          navigate("/");
+      }
         console.error("Error adding idea:", error);
       }
     }
@@ -160,7 +161,7 @@ console.log(ideatoAdd);
       try {
         const response = await axios.put(
           `${VITE_IDEAS_API}/${editIdea._id}`,
-          editIdea
+          editIdea,{headers:{Authorization: `Bearer ${USER_Token}`}}
         );
         setIdeas(
           ideas.map((idea) =>
@@ -169,6 +170,9 @@ console.log(ideatoAdd);
         );
         setEditeIdea(null);
       } catch (error) {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          navigate("/");
+      }
         console.error("Error updating idea:", error);
       }
     }
