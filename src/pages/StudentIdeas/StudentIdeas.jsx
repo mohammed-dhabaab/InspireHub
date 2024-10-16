@@ -25,6 +25,8 @@ function StudentIdeas() {
     const [editStatus, setEditStatus] = useState({});
     const [nameInput, setNameInput] = useState({});
     const [descriptionInput, setDescriptionInput] = useState({});
+    const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
+
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
         if (!storedUser) {
