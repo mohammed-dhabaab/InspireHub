@@ -69,16 +69,16 @@ function AdminRegistration() {
     setErrorMessage("");
   };
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-    if (storedUser) {
-      if (storedUser.role === "student") {
-        navigate("/home");
-      }
-    } else {
-      navigate("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+  //   if (storedUser) {
+  //     if (storedUser.role === "student") {
+  //       navigate("/home");
+  //     }
+  //   } else {
+  //     navigate("/");
+  //   }
+  // }, []);
 
   return (
     <div>
