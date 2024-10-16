@@ -10,6 +10,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
+import IdeaCard from "./IdeaCard";
 
 function Home() {
   const [allStudentsIdeas, setAllStudentsIdeas] = useState([]);
@@ -33,18 +34,18 @@ function Home() {
   const navigate = useNavigate();
   const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
-    useEffect(() => {
-      const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-      if (!storedUser) {
-        navigate("/");
-      } else if (storedUser.role === "admin") {
-        navigate("/admin");
-      }
-     
-    }, [navigate]);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+    if (!storedUser) {
+      navigate("/");
+    } else if (storedUser.role === "admin") {
+      navigate("/admin");
+    }
 
-    USER_ID =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).user.id;
-//   USER_ID = "670ff9873abe01fbd2812066";
+  }, [navigate]);
+
+  USER_ID = JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).user.id;
+  //   USER_ID = "670ff9873abe01fbd2812066";
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -115,18 +116,16 @@ function Home() {
   const addIdea = async () => {
     if (newIdea.name && newIdea.description) {
       const userId = userInfo._id;
-   
+
       const ideatoAdd = { ...newIdea, studentId: userId };
-console.log(ideatoAdd);
 
       try {
         const response = await axios.post(VITE_IDEAS_API, ideatoAdd);
         const updatedUserData = {
           ...userInfo,
-          numberOfIdeas: parseInt(userInfo.numberOfIdeas ) + 1 ,
+          numberOfIdeas: parseInt(userInfo.numberOfIdeas) + 1,
         };
-        const updateResponse = await axios.put( `${VITE_USERS_API}/${userId}`,  updatedUserData );
-        setUserInfo(updateResponse.data);
+        setUserInfo(updatedUserData);
 
         setIdeas([...ideas, response.data]);
         setFiltredArr([...filteredArr, response.data]);
@@ -175,24 +174,23 @@ console.log(ideatoAdd);
 
   return (
     <main className={`${styles.outerWrapper} `}>
-      <div className={`${styles.wrapper} flex justify-center text-primary`}>
-        <h2 className={`${styles.heading2} mb-4`}>
-          Welcome Student{" "}
-          <span className="text-secondary">{userInfo?.name}</span>
+      <div className={`${styles.wrapper} flex  text-primary`}>
+        <h2 className={`${styles.heading2} mb-4`} style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)" }}>
+          👋 Welcome {" "}
+          <span className="text-secondary">{userInfo?.name}!</span>
         </h2>
       </div>
 
       <div className={`${styles.wrapper} flex justify-center`}>
         <div className="text-center ">
-          <h3 className={`${styles.heading3} mb-4`}>Ideas</h3>
+          {/* <h3 className={`${styles.heading3} mb-4`}>Ideas</h3> */}
           <div className="w-full ">
             <div className="relative right-0 ">
-              <ul className="flex list-none justify-center">
+              <ul className="flex list-none justify-center mb-4 mt-8">
                 <li className="mr-4">
                   <button
-                    className={`py-2 px-4 ${
-                      activeTap === "myIdeas" ? "font-bold bg-slate-50" : ""
-                    }`}
+                    className={`py-2 px-4 rounded-md font-medium ${styles.transition500} ${activeTap === "myIdeas" ? "text-primary bg-slate-100" : ""
+                      }`}
                     onClick={() => setActiveTap("myIdeas")}
                   >
                     My Ideas
@@ -200,18 +198,17 @@ console.log(ideatoAdd);
                 </li>
                 <li>
                   <button
-                    className={`py-2 px-4 ${
-                      activeTap === "AllIdeas" ? "font-bold bg-slate-50" : ""
-                    }`}
+                    className={`py-2 px-4 rounded-md font-medium ${styles.transition500} ${activeTap === "AllIdeas" ? "text-primary bg-slate-100" : ""
+                      }`}
                     onClick={() => setActiveTap("AllIdeas")}
                   >
-                    All Ideas
+                    All Accepted Ideas
                   </button>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="mb-6 w-fit mx-auto flex items-center border border-gray-300 rounded-full px-4 py-2">
+          <div className="mb-6 w-fit mx-auto flex items-center border border-gray-300 rounded-full px-4 py-2 shadow-md">
             <input
               onChange={(e) => setSerachTerm(e.target.value)}
               placeholder="search"
@@ -229,13 +226,13 @@ console.log(ideatoAdd);
           <div className="fixed inset-0 flex lg:items-center lg:justify-center md:justify-center sm:justify-center md:items-center sm:items-center max-sm:justify-center max-sm:items-center bg-black bg-opacity-50 z-50">
             <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary ">
               <button
-                className={`absolute top-1 right-1 text-gray-500 hover:text-gray-800 ${styles.transition500}`}
+                className={`absolute top-1 right-1 text-gray-500 hover:text-red-400 ${styles.transition500}`}
                 onClick={() => setIsPopupOpen(false)}
               >
                 <IoIosClose className="w-10 h-10" />
               </button>
               <h4
-                className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
+                className={`${styles.heading4} mb-3 bg-primary text-white p-2 rounded-md`}
               >
                 Add New Idea
               </h4>
@@ -270,7 +267,7 @@ console.log(ideatoAdd);
                   </div>
                   <button
                     onClick={addIdea}
-                    className={`${styles.paragraph4} bg-secondary p-2 rounded-full mt-2 w-full`}
+                    className={`${styles.paragraph4} ${styles.transition500} text-secondary font-bold border-2 border-solid border-secondary hover:text-white hover:bg-secondary p-2 rounded-full mt-2 w-full`}
                   >
                     Add New Idea
                   </button>
@@ -289,44 +286,56 @@ console.log(ideatoAdd);
       <div className={`${styles.wrapper}`}>
         <div className="">
           <button
-            className="btn text-white bg-primary p-2 rounded-full flex flex-wrap gap-2 items-center"
+            className={`${styles.transition500} text-primary border-2 border-solid border-primary hover:text-white hover:bg-primary px-3 py-2 rounded-full flex flex-wrap gap-2 items-center`}
             onClick={() => setIsPopupOpen(true)}
           >
-            <span>New idea</span>
+            <span>Add Idea</span>
             <IoAddCircleOutline className="w-7 h-7" />
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 max-sm:grid-cols-1 lg:grid-cols-3 lg:gap-7 max-sm:justify-items-center md:justify-items-center">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {displayedIdeas
             .slice()
             .reverse()
             .map((idea) => (
-              <div className="" key={idea._id}>
-                <Card
-                  idea={idea}
-                  username={idea.username}
-                  title={idea.name}
-                  description={idea.description}
-                  reason={idea.reason}
-                  onEdit={() => setEditeIdea(idea)}
-                  buttonText={<FaRegEdit className="w-5 h-5" />}
-                  status={idea.status}
-                  isUserCard={idea.studentId == USER_ID}
-                />
-              </div>
+              <IdeaCard
+                key={idea._id}
+                idea={idea}
+                username={idea.username}
+                title={idea.name}
+                description={idea.description}
+                reason={idea.reason}
+                onEdit={() => setEditeIdea(idea)}
+                buttonText={<FaRegEdit className="w-5 h-5" />}
+                status={idea.status}
+                isUserCard={idea.studentId == USER_ID}
+              />
+              // <div className="" key={idea._id}>
+              //   <Card
+              //     idea={idea}
+              //     username={idea.username}
+              //     title={idea.name}
+              //     description={idea.description}
+              //     reason={idea.reason}
+              //     onEdit={() => setEditeIdea(idea)}
+              //     buttonText={<FaRegEdit className="w-5 h-5" />}
+              //     status={idea.status}
+              //     isUserCard={idea.studentId == USER_ID}
+              //   />
+              // </div>
             ))}
         </div>
         {editIdea && (
           <div className="fixed inset-0 flex lg:items-center lg:justify-center md:justify-center sm:justify-center md:items-center sm:items-center max-sm:justify-center max-sm:items-center bg-black bg-opacity-50 z-50">
             <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl w-full bg-white p-8 rounded shadow-lg relative border-4 border-primary">
               <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                className={`${styles.transition500} absolute top-2 right-2 text-gray-500 hover:text-red-500`}
                 onClick={() => setEditeIdea(null)}
               >
                 <IoIosClose className="w-10 h-10" />
               </button>
               <h4
-                className={`${styles.heading4} bg-primary text-white p-2 rounded-md`}
+                className={`${styles.heading4} mb-3 mt-3 bg-primary text-white p-2 rounded-md`}
               >
                 Edit Idea
               </h4>
@@ -348,7 +357,7 @@ console.log(ideatoAdd);
                   </div>
                   <br />
                   <div>
-                    <label className="fint-bold text-xl">description</label>
+                    <label className="fint-bold text-xl">Description</label>
                     <textarea
                       placeholder="Description of the idea (150 letters)"
                       maxLength={"150"}
@@ -364,9 +373,9 @@ console.log(ideatoAdd);
                   </div>
                   <button
                     onClick={updateIdea}
-                    className={`${styles.paragraph4} bg-secondary p-2 rounded-full  w-full`}
+                    className={`${styles.paragraph4} ${styles.transition500} mt-2 text-secondary font-bold border-2 border-solid border-secondary hover:text-white hover:bg-secondary p-2 rounded-full  w-full`}
                   >
-                    update Idea
+                    Update Idea
                   </button>
                 </div>
                 <div className="w-96 max-w-xs md:max-w-md lg:max-w-lg h-auto">

@@ -1,14 +1,14 @@
 import styles from "../styles"
 import { FaUser } from "react-icons/fa6";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaRegEdit } from "react-icons/fa";
 import { useEffect } from "react";
 import { PiStudentFill } from "react-icons/pi";
 
 
 function Card({ username, title, description, reason, onEdit, buttonText, status, isUserCard }) {
-//   useEffect(() => {
-//     console.log(idea)
-//   })
+  //   useEffect(() => {
+  //     console.log(idea)
+  //   })
   const statusStyles = {
     Acceptable: {
       boxShadow: "[box-shadow:12px_12px_0px_0px_rgba(187,247,133,0.5)]",
@@ -29,7 +29,7 @@ function Card({ username, title, description, reason, onEdit, buttonText, status
   };
   const { boxShadow, hoverBoxShadow } = statusStyles[status] || statusStyles.default
   return (
-    <div className={`${styles.outerWrapper}`}>
+    <div className={``}>
       <div
         className={`relative rounded-lg -skew-x-6 -translate-y-2 -translate-y-6 hover:-translate-y-1 hover:-translate-x-0 hover:skew-x-0 duration-500
      w-80 h-56 p-2 bg-neutral-50 card-compact hover:bg-base-200 transition-all duration-200 ${boxShadow} ${hoverBoxShadow} `}
@@ -49,8 +49,7 @@ function Card({ username, title, description, reason, onEdit, buttonText, status
             </div>
             {isUserCard ?
               (
-                <button onClick={onEdit} className=" text-black hover:text-green-600 hover: px-2 py-9 rounded  ">{buttonText}</button>
-
+                <button onClick={onEdit} className=" text-black hover:text-blue-500 fill-current px-2 py-9 rounded  ">{buttonText}</button>
               )
               : null}
             {/* <button onClick={onEdit} className=" text-black hover:text-green-600 hover: px-2 py-9 rounded  ">{buttonText}</button> */}

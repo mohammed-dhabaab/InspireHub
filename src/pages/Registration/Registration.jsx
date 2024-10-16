@@ -20,7 +20,6 @@ function Registration() {
     const VITE_REGISTER_API = import.meta.env.VITE_REGISTER_API;
     const VITE_IOGIN_API = import.meta.env.VITE_IOGIN_API;
 
-
     const handleSignup = async (e) => {
         e.preventDefault();
 
@@ -40,21 +39,21 @@ function Registration() {
 
         try {
             const response = await axios.post(VITE_REGISTER_API, {
-                        name: fullname,
-                        email: email,
-                        password: password,
-                        numberOfIdeas: 0,
-                        role: 'student',
-                    });
-             if(response.status === 201){
+                name: fullname,
+                email: email,
+                password: password,
+                numberOfIdeas: 0,
+                role: 'student',
+            });
+            if (response.status === 201) {
                 const responselogin = await axios.post(VITE_IOGIN_API, {
                     email: email,
                     password: password,
                 });
                 console.log(responselogin);
-               localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(responselogin.data));
-    
-               navigate("/home");
+                localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(responselogin.data));
+
+                navigate("/home");
 
             }
         } catch (error) {
@@ -78,7 +77,7 @@ function Registration() {
             });
             if (response.status === 200) {
                 localStorage.setItem(USER_LOCAL_STORGE, JSON.stringify(response.data));
-    
+
                 if (response.data.user.role === 'admin') {
                     navigate("/admin");
                 } else {

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { PiStudentFill } from "react-icons/pi";
 import { FcIdea } from "react-icons/fc";
-import { IoPersonRemove } from "react-icons/io5"; 
+import { IoPersonRemove } from "react-icons/io5";
 import styles from "../../styles";
 import searchForTerm from "../../utils/searchForTerm";
 import DeleteModel from "../../components/DeleteModel";
@@ -19,6 +19,16 @@ function Admin() {
 
   const userApiUrl = import.meta.env.VITE_USERS_API;
   const ideasApiUrl = import.meta.env.VITE_IDEAS_API;
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+
+    if (!storedUser || !storedUser.user) {
+      navigate("/");
+    } else if (storedUser.user.role !== "admin") {
+      navigate("/home");
+    }
+  }, []);
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -119,8 +129,8 @@ function Admin() {
                     <p className={`${styles.paragraph3} text-blue-800 font-semibold`}>
                       {student.name}
                     </p>
-                    <div className="flex items-center">
-                      <FcIdea className="w-6 h-6 mr-2" />
+                    <div className="mt-1 flex gap-1 items-center">
+                      <FcIdea className="w-6 h-6 -translate-y-1" />
                       <span className={`${styles.paragraph4} text-blue-600`}>
                         {student.ideas.length}
                       </span>
@@ -133,9 +143,9 @@ function Admin() {
                     e.stopPropagation();
                     openConfirmationDialog(student._id);
                   }}
-                  className="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition duration-200"
+                  className=" w-8 h-8 rounded-full flex items-center justify-center transition duration-200"
                 >
-                  <IoPersonRemove className="text-white w-6 h-6" /> 
+                  <IoPersonRemove title="Remove Student" className={`cursor-pointer text-red-400 hover:text-red-600 w-[24px] h-[24px] sm:w-[28px] sm:h-[28px] ${styles.transition500}`} />
                 </button>
               </div>
             ))}

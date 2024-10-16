@@ -76,6 +76,7 @@ function StudentIdeas() {
 
             const response = await axios.delete(`${import.meta.env.VITE_USERS_API}/${studentId}`);
             if (response.status === 200) {
+                setStudentIdeas(() => [])
                 navigate("/admin");
             }
         } catch (error) {
@@ -211,7 +212,7 @@ function StudentIdeas() {
                         </div>
                         <h1 className={`${styles.heading2}`}>{student.name}</h1>
                     </div>
-                    <IoPersonRemove onClick={deleteStudent} className={`cursor-pointer text-red-400 hover:text-red-600 w-[24px] h-[24px] sm:w-[28px] sm:h-[28px] ${styles.transition500}`} />
+                    <IoPersonRemove title="Remove Student" onClick={deleteStudent} className={`cursor-pointer text-red-400 hover:text-red-600 w-[24px] h-[24px] sm:w-[28px] sm:h-[28px] ${styles.transition500}`} />
                 </div>
                 <div className='mb-6 w-fit mx-auto flex items-center border border-gray-300 rounded-full px-4 py-2'>
                     <input
@@ -246,7 +247,7 @@ function StudentIdeas() {
                                         </div>
                                     </div>
                                     {!editStatus[idea._id] ? (
-                                        <p className='p-2'>{idea.description}</p>
+                                        <p className='p-2 break-words'>{idea.description}</p>
                                     ) : (
                                         <textarea
                                             value={descriptionInput[idea._id] || ""}
@@ -277,7 +278,7 @@ function StudentIdeas() {
                                 {idea.reason && (
                                     <div className='mt-6'>
                                         <p className='font-medium text-gray-600 mb-2'>Admin Comment</p>
-                                        <p className='bg-gray-50 rounded-md p-2'>{idea.reason}</p>
+                                        <p className='bg-gray-50 rounded-md p-2 break-words'>{idea.reason}</p>
                                     </div>
                                 )}
 
