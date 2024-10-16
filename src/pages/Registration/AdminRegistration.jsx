@@ -14,8 +14,9 @@ function AdminRegistration() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
   const apiUrl = import.meta.env.VITE_USERS_API;
+  const VITE_REGISTER_API = import.meta.env.VITE_REGISTER_API;
 
-  const handleSignin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     if (fullname.length <= 3) {
       setErrorMessage("Full Name must be more than 3 letters");
@@ -90,7 +91,7 @@ function AdminRegistration() {
           <div className="flex flex-col justify-start items-center w-full h-[90%]">
             <form
               className={`w-[70%] p-4 max-md:w-[80%]`}
-              onSubmit={handleSignin}
+              onSubmit={handleSignup}
             >
               <h1
                 className={`${styles.heading4} text-primary text-center mb-4`}
