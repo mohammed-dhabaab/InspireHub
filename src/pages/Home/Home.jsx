@@ -8,7 +8,8 @@ import ideasphoto from "../../assets/Home/ideaphoto.png";
 import ideaedit from "../../assets/Home/editidea.png";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
-import { IoIosSearch } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+
 
 function Home() {
   const [allStudentsIdeas, setAllStudentsIdeas] = useState([])
@@ -25,10 +26,24 @@ function Home() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [editIdea, setEditeIdea] = useState(null);
   const [activeTap, setActiveTap] = useState("myIdeas");
-  const USER_ID = JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).id;
+  let USER_ID = "";
   const VITE_IDEAS_API = import.meta.env.VITE_IDEAS_API
   const VITE_USERS_API = import.meta.env.VITE_USERS_API
+  const navigate = useNavigate();
+  const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+    if (!storedUser) {
+      navigate("/"); 
+    } else if (storedUser.role === "admin") {
+      navigate("/admin"); 
+    }
+    USER_ID =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).id;
+
+  }, [navigate]);
+
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -152,6 +167,9 @@ console.log("########################");
 
   }, [searchTerm, ideas])
   const displayedIdeas = searchTerm ? filteredArr : fitredIdeas;
+
+// 
+
 
   return (
     <main className={`${styles.outerWrapper} `}>
