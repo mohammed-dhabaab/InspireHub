@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles"; 
+import styles from "../styles";
 
 const DeleteModel = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;

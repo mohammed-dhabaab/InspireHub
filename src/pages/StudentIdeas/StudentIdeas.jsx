@@ -28,15 +28,15 @@ function StudentIdeas() {
     const [nameInput, setNameInput] = useState({});
     const [descriptionInput, setDescriptionInput] = useState({});
 
-    useEffect(() => {
-        const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-        if (!storedUser) {
-          navigate("/");
-        } else if (storedUser.role === "student") {
-          navigate("/home");
-        }
-        
-      }, []);
+    // useEffect(() => {
+    //     const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE)).user;
+    //     if (!storedUser) {
+    //         navigate("/");
+    //     } else if (storedUser.role === "student") {
+    //         navigate("/home");
+    //     }
+
+    // }, []);
 
 
     const getStudentIdeas = async () => {
@@ -68,9 +68,9 @@ function StudentIdeas() {
     const deleteStudent = async () => {
         try {
             await Promise.all(studentIdeas.map(async (idea) => {
-                const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${idea.id}`);
+                const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${idea._id}`);
                 if (response.status !== 200) {
-                    throw new Error(`Failed to delete idea with ID ${idea.id}`);
+                    throw new Error(`Failed to delete idea with ID ${idea._id}`);
                 }
             }));
 
@@ -98,7 +98,7 @@ function StudentIdeas() {
         try {
             setShowCardSpinner(prevState => ({ ...prevState, [ideaId]: true }));
 
-            const ideaIndex = studentIdeas.findIndex(idea => idea.id === ideaId);
+            const ideaIndex = studentIdeas.findIndex(idea => idea._id === ideaId);
             if (ideaIndex !== -1) {
                 const updatedIdea = {
                     ...studentIdeas[ideaIndex],
@@ -128,7 +128,7 @@ function StudentIdeas() {
         try {
             setShowCardSpinner(prevState => ({ ...prevState, [ideaId]: true }));
 
-            const ideaIndex = studentIdeas.findIndex(idea => idea.id === ideaId);
+            const ideaIndex = studentIdeas.findIndex(idea => idea._id === ideaId);
             if (ideaIndex !== -1) {
 
                 const updatedIdea = {
@@ -169,8 +169,8 @@ function StudentIdeas() {
             setShowCardSpinner(prevState => ({ ...prevState, [ideaId]: true }));
             const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`);
             if (response.status === 200) {
-                setStudentIdeas(prevIdeas => prevIdeas.filter(idea => idea.id !== ideaId));
-                setFilteredStudentIdeas(prevIdeas => prevIdeas.filter(idea => idea.id !== ideaId));
+                setStudentIdeas(prevIdeas => prevIdeas.filter(idea => idea._id !== ideaId));
+                setFilteredStudentIdeas(prevIdeas => prevIdeas.filter(idea => idea._id !== ideaId));
             }
         } catch (error) {
             console.error(error);
@@ -188,7 +188,7 @@ function StudentIdeas() {
             setNameInput(prevState => ({ ...prevState, [ideaId]: "" }));
             setDescriptionInput(prevState => ({ ...prevState, [ideaId]: "" }));
         } else {
-            const ideaToEdit = studentIdeas.find(idea => idea.id === ideaId);
+            const ideaToEdit = studentIdeas.find(idea => idea._id === ideaId);
             setNameInput(prevState => ({ ...prevState, [ideaId]: ideaToEdit.name }));
             setDescriptionInput(prevState => ({ ...prevState, [ideaId]: ideaToEdit.description }));
         }
@@ -226,45 +226,45 @@ function StudentIdeas() {
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
                     {filteredStudentIdeas.length > 0 ? (
-                        filteredStudentIdeas.map((idea) => (
-                            <div key={idea.id} className={`${setCardColor(idea.status)} relative flex flex-col gap-4 p-4 shadow-md rounded-md`}>
+                        filteredStudentIdeas.slice().reverse().map((idea) => (
+                            <div key={idea._id} className={`${setCardColor(idea.status)} relative flex flex-col gap-4 p-4 shadow-md rounded-md`}>
                                 <p className={`${statusTextColor(idea.status)}`}>{idea.status || "New"}</p>
                                 <div>
                                     <div className='flex justify-between gap-1'>
-                                        {!editStatus[idea.id] ? (
+                                        {!editStatus[idea._id] ? (
                                             <h3 className='mb-2 text-xl font-bold'>{idea.name}</h3>
                                         ) : (
                                             <input
-                                                value={nameInput[idea.id] || ""}
-                                                onChange={(e) => setNameInput(prevState => ({ ...prevState, [idea.id]: e.target.value }))}
+                                                value={nameInput[idea._id] || ""}
+                                                onChange={(e) => setNameInput(prevState => ({ ...prevState, [idea._id]: e.target.value }))}
                                                 className='w-full mb-2 text-xl font-bold bg-transparent border-b border-gray-400 outline-none'
                                                 placeholder='Idea Name'
                                             />
                                         )}
-                                        <div onClick={() => handleEditToggle(idea.id)} className='cursor-pointer text-blue-400  hover:text-blue-500'>
+                                        <div onClick={() => handleEditToggle(idea._id)} className='cursor-pointer text-blue-400  hover:text-blue-500'>
                                             <FaEdit />
                                         </div>
                                     </div>
-                                    {!editStatus[idea.id] ? (
+                                    {!editStatus[idea._id] ? (
                                         <p className='p-2'>{idea.description}</p>
                                     ) : (
                                         <textarea
-                                            value={descriptionInput[idea.id] || ""}
-                                            onChange={(e) => setDescriptionInput(prevState => ({ ...prevState, [idea.id]: e.target.value }))}
+                                            value={descriptionInput[idea._id] || ""}
+                                            onChange={(e) => setDescriptionInput(prevState => ({ ...prevState, [idea._id]: e.target.value }))}
                                             className='w-full resize-none bg-transparent p-2 border-b border-gray-400 outline-none'
                                             placeholder='Idea Description'
                                         />
                                     )}
-                                    {editStatus[idea.id] && (
+                                    {editStatus[idea._id] && (
                                         <div className='flex justify-end gap-2'>
                                             <button
-                                                onClick={() => handleEditToggle(idea.id)}
+                                                onClick={() => handleEditToggle(idea._id)}
                                                 className={`${styles.cancelButton}`}
                                             >
                                                 Cancel
                                             </button>
                                             <button
-                                                onClick={() => editIdea(idea.id)}
+                                                onClick={() => editIdea(idea._id)}
                                                 className={`${styles.confirmButton}`}
                                             >
                                                 Confirm
@@ -281,7 +281,7 @@ function StudentIdeas() {
                                     </div>
                                 )}
 
-                                {showRejectionInputs[idea.id] && (
+                                {showRejectionInputs[idea._id] && (
                                     <div className='flex-grow gap-2 flex flex-col justify-end items-end'>
                                         <textarea
                                             value={reasonMessage}
@@ -293,13 +293,13 @@ function StudentIdeas() {
                                         />
                                         <div className='flex gap-2 justify-end'>
                                             <button
-                                                onClick={() => toggleReasonInput(idea.id)}
+                                                onClick={() => toggleReasonInput(idea._id)}
                                                 className={`${styles.cancelButton}`}
                                             >
                                                 Cancel
                                             </button>
                                             <button
-                                                onClick={() => changeIdeaStatus(idea.id, "Acceptable")}
+                                                onClick={() => changeIdeaStatus(idea._id, "Acceptable")}
                                                 className={`${styles.confirmButton}`}
                                             >
                                                 Confirm
@@ -308,21 +308,24 @@ function StudentIdeas() {
                                     </div>
                                 )}
 
-                                {!showRejectionInputs[idea.id] && (
+                                {!showRejectionInputs[idea._id] && (
                                     <div className='mt-4 flex-grow flex justify-end items-end gap-4'>
                                         {idea.status === "Rejected" && (
                                             <button
-                                                onClick={() => deleteIdea(idea.id)}
+                                                onClick={() => deleteIdea(idea._id)}
                                                 className={`${styles.deleteButton}`}
                                             >
-                                                Delete
-                                                {showCardSpinner[idea.id] && <PuffLoader size={10} color="#fff" />}
-                                            </button>
+
+                                                {showCardSpinner[idea._id] == null ? (
+                                                    "Delete"
+                                                ) : (
+                                                    <PuffLoader size={10} color="#fff" />
+                                                )}                                            </button>
                                         )}
                                         {idea.status !== "Rejected" && (
                                             <button
                                                 onClick={() => {
-                                                    toggleReasonInput(idea.id);
+                                                    toggleReasonInput(idea._id);
                                                     setIdeaStatus("Rejected");
                                                 }}
                                                 className={`${styles.rejectButton} `}
@@ -333,7 +336,7 @@ function StudentIdeas() {
                                         {idea.status !== "Acceptable" && (
                                             <button
                                                 onClick={() => {
-                                                    toggleReasonInput(idea.id);
+                                                    toggleReasonInput(idea._id);
                                                     setIdeaStatus("Acceptable");
                                                 }}
                                                 className={`${styles.acceptButton}`}
@@ -342,7 +345,7 @@ function StudentIdeas() {
                                             </button>
                                         )}
 
-                                        {showCardSpinner[idea.id] && (
+                                        {showCardSpinner[idea._id] && (
                                             <div>
                                                 <div className='absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2'>
                                                     <PuffLoader size={10} color="#fff" />
