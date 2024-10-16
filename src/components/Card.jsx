@@ -45,7 +45,7 @@ function Card({ idea, username, imgprofile, title, description, reason, onEdit, 
         </figure >
         <div className="absolute text-neutral-800 bottom-4 left-0 px-4 flex flex-col w-full h-full">
           <figure className="flex flex-wrap justify-between">
-            <div className=" text-neutral-800 px-4 pt-4 flex items-center">
+            <div className={`text-neutral-800 px-4 ${isUserCard ? 'pt-4':'pt-8'} flex items-center `}>
               <img className="w-10 h-10 rounded-full" src={`${defaultUserPc}`} alt="Rounded avatar" />
               <p className={`${styles.paragraph4}`}>{username}</p>
             </div>
