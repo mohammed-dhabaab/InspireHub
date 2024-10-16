@@ -8,6 +8,7 @@ import ideasphoto from "../../assets/Home/ideaphoto.png";
 import ideaedit from "../../assets/Home/editidea.png";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
+import { IoIosSearch } from "react-icons/io";
 
 function Home() {
   const [allStudentsIdeas, setAllStudentsIdeas] = useState([])
@@ -185,12 +186,15 @@ console.log("########################");
               </ul>
             </div>
           </div>
-          <div className={`${styles.wrapper} mt-2`}>
-            <input
+          <div className='mb-6 w-fit mx-auto flex items-center border border-gray-300 rounded-full px-4 py-2'>
+          <input
               onChange={(e) => setSerachTerm(e.target.value)}
               placeholder="search"
-              className={styles.Search}
+
+                        className='w-full outline-none'
             />
+                                <IoIosSearch size={20} className='text-secondary-light-color ml-2' />
+
           </div>
 
         </div>
@@ -264,10 +268,10 @@ console.log("########################");
             <span>New idea</span><IoAddCircleOutline className="w-7 h-7" />
           </button>
         </div>
-        <div className="flex flex-wrap justify-around gap-1">
+        <div className="flex flex-wrap justify-around gap-1 ">
           {displayedIdeas.slice().reverse().map((idea) => (
             <div
-              className="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
+              className="flex-shrink-0 w-full max-sm:w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 "
               key={idea.id}
             >
               <Card
