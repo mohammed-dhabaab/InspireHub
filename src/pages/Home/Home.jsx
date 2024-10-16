@@ -33,19 +33,18 @@ function Home() {
   const navigate = useNavigate();
   const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
-  //   useEffect(() => {
-  //     const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-  //     if (!storedUser) {
-  //       navigate("/");
-  //     } else if (storedUser.role === "admin") {
-  //       navigate("/admin");
-  //     }
-  //     // } else{
-  //     // }
-  //   }, [navigate]);
+    useEffect(() => {
+      const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+      if (!storedUser) {
+        navigate("/");
+      } else if (storedUser.role === "admin") {
+        navigate("/admin");
+      }
+     
+    }, [navigate]);
 
-  //   USER_ID =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE))._id;
-  USER_ID = "670ff9873abe01fbd2812066";
+    USER_ID =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).user.id;
+//   USER_ID = "670ff9873abe01fbd2812066";
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -92,7 +91,6 @@ function Home() {
           (idea) => idea.studentId === USER_ID
         );
 
-        console.log(studentIdeas);
 
         const studentIdeasWithUserInfo = studentIdeas.map((idea) => {
           return {
@@ -112,30 +110,22 @@ function Home() {
     fetchCurrentUserIdeas();
   }, [userInfo]);
 
+
+
   const addIdea = async () => {
     if (newIdea.name && newIdea.description) {
       const userId = userInfo._id;
-      console.log(userInfo);
-      console.log("//////////////////");
-
-      console.log(userId);
-
+   
       const ideatoAdd = { ...newIdea, studentId: userId };
-      console.log("00000000000000000000");
-
-      console.log(ideatoAdd);
+console.log(ideatoAdd);
 
       try {
         const response = await axios.post(VITE_IDEAS_API, ideatoAdd);
         const updatedUserData = {
           ...userInfo,
-          numberOfIdeas: userInfo.numberOfIdeas + 1,
+          numberOfIdeas: parseInt(userInfo.numberOfIdeas ) + 1 ,
         };
-        const updateResponse = await axios.put(
-          `${VITE_USERS_API}/${userId}`,
-          updatedUserData
-        );
-        console.log(updateResponse);
+        const updateResponse = await axios.put( `${VITE_USERS_API}/${userId}`,  updatedUserData );
         setUserInfo(updateResponse.data);
 
         setIdeas([...ideas, response.data]);
@@ -146,7 +136,6 @@ function Home() {
           studentId: USER_ID,
           status: "",
           reason: "",
-          //   avatar: newIdea.avatar,
         });
 
         setIsPopupOpen(false);
