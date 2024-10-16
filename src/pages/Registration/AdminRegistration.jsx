@@ -14,8 +14,9 @@ function AdminRegistration() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
   const apiUrl = import.meta.env.VITE_USERS_API;
+  const VITE_REGISTER_API = import.meta.env.VITE_REGISTER_API;
 
-  const handleSignin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     if (fullname.length <= 3) {
       setErrorMessage("Full Name must be more than 3 letters");
@@ -32,30 +33,29 @@ function AdminRegistration() {
       return;
     }
     setErrorMessage("");
-
     try {
-      const response = await axios.get(apiUrl);
-      const users = response.data;
-      const userExists = users.some((ele) => ele.email === email);
+      const response = await axios.post(VITE_REGISTER_API, {
+                  name: fullname,
+                  email: email,
+                  password: password,
+                  numberOfIdeas: 0,
+                  role: "admin",
+              });
+       if(response.status === 201){
+          clear();
+          setSuccessMessage(
+            `${newUserResponse.data.name} have been registerd as a new admin`
+          );
 
-      if (!userExists) {
-        const newUserResponse = await axios.post(apiUrl, {
-          name: fullname,
-          email: email,
-          password: password,
-          numberOfIdeas: 0,
-          role: "admin",
-        });
-        clear();
-        setSuccessMessage(
-          `${newUserResponse.data.name} have been registerd as a new admin`
-        );
-      } else {
-        setErrorMessage("The email is already being used");
       }
-    } catch (error) {
-      setErrorMessage("Something went wrong, please try again later");
-    }
+  } catch (error) {
+      if (error.response && error.response.status === 400) {
+          setErrorMessage('The email is already being used');
+      } else {
+          setErrorMessage("Something went wrong, please try again later");
+      }
+      console.error(error);
+  }
   };
 
   useEffect(() => {
@@ -90,7 +90,7 @@ function AdminRegistration() {
           <div className="flex flex-col justify-start items-center w-full h-[90%]">
             <form
               className={`w-[70%] p-4 max-md:w-[80%]`}
-              onSubmit={handleSignin}
+              onSubmit={handleSignup}
             >
               <h1
                 className={`${styles.heading4} text-primary text-center mb-4`}
