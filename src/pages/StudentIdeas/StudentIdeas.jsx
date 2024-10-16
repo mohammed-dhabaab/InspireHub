@@ -25,6 +25,16 @@ function StudentIdeas() {
     const [editStatus, setEditStatus] = useState({});
     const [nameInput, setNameInput] = useState({});
     const [descriptionInput, setDescriptionInput] = useState({});
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+        if (!storedUser) {
+          navigate("/");
+        } else if (storedUser.role === "student") {
+          navigate("/home");
+        }
+        
+      }, []);
+
 
     const getStudentIdeas = async () => {
         try {
