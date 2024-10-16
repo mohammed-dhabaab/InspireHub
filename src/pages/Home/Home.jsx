@@ -327,8 +327,9 @@ console.log("########################");
 
                     <input
                       type="text"
-                      placeholder="عنواف الفكره "
+                        placeholder="Title Idea"
                       value={editIdea.name}
+                      maxLength={30}
                       onChange={(e) => {
                         setEditeIdea({ ...editIdea, name: e.target.value });
                       }}
@@ -339,12 +340,13 @@ console.log("########################");
                   <div>
                     <label className="fint-bold text-xl">description</label>
                     <textarea
-                      placeholder=",وصف الفكره"
+                         placeholder="Description of the idea (150 letters)"
+                         maxLength={"150"}
                       value={editIdea.description}
                       onChange={(e) =>
                         setEditeIdea({ ...editIdea, description: e.target.value })
                       }
-                      className={`${styles.input}`}
+                      className={`${styles.input} resize-none`}
                     />
                   </div>
                   <button
