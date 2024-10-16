@@ -32,18 +32,18 @@ function Home() {
   const navigate = useNavigate();
   const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
-  // useEffect(() => {
-  //   const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-  //   if (!storedUser) {
-  //     navigate("/"); 
-  //   } else if (storedUser.role === "admin") {
-  //     navigate("/admin"); 
-  //   } else{
-     USER_ID =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).id;
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+    if (!storedUser) {
+      navigate("/"); 
+    } else if (storedUser.role === "admin") {
+      navigate("/admin"); 
+    } else{
+    }
+  }, [navigate]);
 
-  
+  USER_ID =JSON.parse(localStorage.getItem(import.meta.env.VITE_USER_LOCAL_STORGE)).id;
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
