@@ -13,8 +13,8 @@ function AdminRegistration() {
   const upperRegex = /[A-Z]/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
-  const apiUrl = import.meta.env.VITE_USERS_API;
   const VITE_REGISTER_API = import.meta.env.VITE_REGISTER_API;
+  
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -41,10 +41,11 @@ function AdminRegistration() {
                   numberOfIdeas: 0,
                   role: "admin",
               });
+              console.log(response)
        if(response.status === 201){
           clear();
           setSuccessMessage(
-            `${newUserResponse.data.name} have been registerd as a new admin`
+            `${fullname} have been registerd as a new admin`
           );
 
       }
@@ -69,16 +70,15 @@ function AdminRegistration() {
     setErrorMessage("");
   };
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
-    if (storedUser) {
-      if (storedUser.role === "student") {
-        navigate("/home");
-      }
-    } else {
-      navigate("/");
-    }
-  }, []);
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
+
+        if (!storedUser || !storedUser.user) {
+            navigate("/");
+        } else if (storedUser.user.role !== "admin") {
+            navigate("/home");
+        }
+    }, []);
 
   return (
     <div>
