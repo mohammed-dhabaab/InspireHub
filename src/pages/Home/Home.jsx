@@ -94,6 +94,7 @@ function Home() {
           };
         });
 
+        console.log(allAcceptedIdeas)
         const studentIdeas = allIdeas.filter(
           (idea) => idea.studentId === USER_ID
         );

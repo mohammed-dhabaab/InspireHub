@@ -128,6 +128,7 @@ function StudentIdeas() {
                 setFilteredStudentIdeas(newStudentIdeas);
                 await axios.put(`${import.meta.env.VITE_IDEAS_API}/${ideaId}`, updatedIdea, { headers: { Authorization: `Bearer ${USER_Token}` } });
                 toggleReasonInput(ideaId);
+                setReasonMessage("")
             }
         } catch (error) {
             if (error.response && (error.response.status === 401 || error.response.status === 403)) {

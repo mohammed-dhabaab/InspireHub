@@ -37,7 +37,7 @@ function Admin() {
     const fetchStudents = async () => {
       try {
         const response = await axios.get(userApiUrl, { headers: { Authorization: `Bearer ${USER_Token}` } });
-        setStudents(response.data);
+        setStudents(response.data.filter((student) => student.role === "student"));
       } catch (error) {
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
           navigate("/");
@@ -48,25 +48,48 @@ function Admin() {
     fetchStudents();
   }, [userApiUrl]);
 
-  const handleRemove = async (id) => {
-    try {
-      await axios.delete(`${userApiUrl}/${id}`, { headers: { Authorization: `Bearer ${USER_Token}` } });
+  // const handleRemove = async (id) => {
+  //   try {
+  //     await axios.delete(`${userApiUrl}/${id}`, { headers: { Authorization: `Bearer ${USER_Token}` } });
 
+  //     const ideasResponse = await axios.get(ideasApiUrl, { headers: { Authorization: `Bearer ${USER_Token}` } });
+  //     const ideas = ideasResponse.data;
+  //     const studentIdeas = ideas.filter((idea) => idea.studentId === id);
+  //     await Promise.all(
+  //       studentIdeas.map(async (idea) => {
+  //         await axios.delete(`${ideasApiUrl}/${idea.id}`, { headers: { Authorization: `Bearer ${USER_Token}` } });
+  //       })
+  //     );
+
+  //     setStudents((prevStudents) => prevStudents.filter((student) => student._id !== id));
+  //   } catch (error) {
+  //     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+  //       navigate("/");
+  //     }
+  //     console.error("Error removing student and ideas:", error);
+  //   }
+  // };
+
+  const deleteStudent = async (studentId) => {
+    try {
       const ideasResponse = await axios.get(ideasApiUrl, { headers: { Authorization: `Bearer ${USER_Token}` } });
       const ideas = ideasResponse.data;
-      const studentIdeas = ideas.filter((idea) => idea.studentId === id);
-      await Promise.all(
-        studentIdeas.map(async (idea) => {
-          await axios.delete(`${ideasApiUrl}/${idea.id}`, { headers: { Authorization: `Bearer ${USER_Token}` } });
-        })
-      );
+      const studentIdeas = ideas.filter((idea) => idea.studentId === studentId);
 
-      setStudents((prevStudents) => prevStudents.filter((student) => student._id !== id));
+      await Promise.all(studentIdeas.map(async (idea) => {
+        const response = await axios.delete(`${import.meta.env.VITE_IDEAS_API}/${idea._id}`, { headers: { Authorization: `Bearer ${USER_Token}` } });
+        if (response.status !== 200) {
+          throw new Error(`Failed to delete idea with ID ${idea._id}`);
+        }
+      }));
+
+      const response = await axios.delete(`${import.meta.env.VITE_USERS_API}/${studentId}`, { headers: { Authorization: `Bearer ${USER_Token}` } });
+      setStudents((prevStudents) => prevStudents.filter((student) => student._id !== studentId))
     } catch (error) {
       if (error.response && (error.response.status === 401 || error.response.status === 403)) {
         navigate("/");
       }
-      console.error("Error removing student and ideas:", error);
+      console.error('Error deleting student and/or associated ideas:', error);
     }
   };
 
@@ -85,7 +108,8 @@ function Admin() {
 
   const confirmRemoval = () => {
     if (studentIdToRemove) {
-      handleRemove(studentIdToRemove);
+      // handleRemove(studentIdToRemove);
+      deleteStudent(studentIdToRemove)
     }
     setIsDialogOpen(false);
     setStudentIdToRemove(null);
@@ -121,7 +145,6 @@ function Admin() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
           {students
-            .filter((student) => student.role === "student")
             .filter((student) => searchForTerm(searchInput, [student]).length > 0)
             .map((student) => (
               <div

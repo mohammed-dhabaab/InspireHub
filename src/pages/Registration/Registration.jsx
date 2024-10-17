@@ -214,7 +214,7 @@ function Registration() {
                                 </button>
                             </div>
                         </form>
-                        <form className={`${isLoginActive ? "" : "hidden"} w-[70%]  p-4 max-md:w-[80%]`}
+                        <form className={`${isLoginActive ? "" : "hidden"} mt-12 w-[70%]  p-4 max-md:w-[80%]`}
                             onSubmit={handleLogin}>
                             <h1 className={`${styles.heading4} text-primary text-center mb-4`}>Login</h1>
                             <div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import styles from '../../styles';
+import { PiStudentFill } from 'react-icons/pi';
 
 function IdeaCard({ username, title, description, reason, onEdit, buttonText, status, isUserCard }) {
 
@@ -22,6 +23,10 @@ function IdeaCard({ username, title, description, reason, onEdit, buttonText, st
         <div className={`${setCardColor(status)} relative flex flex-col gap-4 p-4 shadow-md rounded-md`}>
             <p className={`${statusTextColor(status)}`}>{status || "New"}</p>
             <div>
+                <div className='flex items-center gap-2 mb-2 mt-4'>
+                    <PiStudentFill className='w-[28px] h-[28px] sm:w-[30px] sm:h-[30px] md:w-[34px] md:h-[34px]' />
+                    <p>{username}</p>
+                </div>
                 <div className='flex justify-between gap-1'>
                     <h3 className='mb-2 text-xl font-bold'>{title}</h3>
                     <div onClick={onEdit} className='cursor-pointer text-blue-400  hover:text-blue-500'>
