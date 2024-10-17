@@ -61,8 +61,7 @@ function Admin() {
         })
       );
 
-      setStudents((prevStudents) => prevStudents.filter((student) => student.id !== id));
-      console.log("Student and related ideas removed successfully");
+      setStudents((prevStudents) => prevStudents.filter((student) => student._id !== id));
     } catch (error) {
       if (error.response && (error.response.status === 401 || error.response.status === 403)) {
         navigate("/");

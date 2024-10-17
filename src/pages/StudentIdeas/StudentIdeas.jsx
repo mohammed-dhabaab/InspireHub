@@ -26,6 +26,7 @@ function StudentIdeas() {
     const [editStatus, setEditStatus] = useState({});
     const [nameInput, setNameInput] = useState({});
     const [descriptionInput, setDescriptionInput] = useState({});
+    const USER_LOCAL_STORGE = import.meta.env.VITE_USER_LOCAL_STORGE;
 
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem(USER_LOCAL_STORGE));
@@ -270,6 +271,7 @@ function StudentIdeas() {
                                     ) : (
                                         <textarea
                                             value={descriptionInput[idea._id] || ""}
+                                            maxLength={"150"}
                                             onChange={(e) => setDescriptionInput(prevState => ({ ...prevState, [idea._id]: e.target.value }))}
                                             className='w-full resize-none bg-transparent p-2 border-b border-gray-400 outline-none'
                                             placeholder='Idea Description'
@@ -307,7 +309,7 @@ function StudentIdeas() {
                                             value={reasonMessage}
                                             onChange={(e) => setReasonMessage(e.target.value)}
                                             className='w-full shadow-md resize-none px-2 py-1 rounded-md bg-slate-50 opacity-80 border border-gray-200 outline-none placeholder:text-gray-400'
-                                            maxLength={80}
+                                            maxLength={"150"}
                                             rows={3}
                                             placeholder={`Comment`}
                                         />
@@ -336,7 +338,7 @@ function StudentIdeas() {
                                                 className={`${styles.deleteButton}`}
                                             >
 
-                                                {showCardSpinner[idea._id] == null ? (
+                                                {showCardSpinner[idea._id] !== null ? (
                                                     "Delete"
                                                 ) : (
                                                     <PuffLoader size={10} color="#fff" />
